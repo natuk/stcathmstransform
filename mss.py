@@ -81,7 +81,10 @@ for row in rows:
     if prototypeneeded:
         prototypeneeded, prototyperoot = getprototype(row, prototypeneeded, prototyperoot, bookelement)
 
-
+tree = etree.ElementTree(root)
+tree.write(open('mss.xml', 'wb'), encoding='utf-8', pretty_print=True)
+prototypetree = etree.ElementTree(prototyperoot)
+prototypetree.write(open('mss-prototype.xml', 'wb'), encoding='utf-8', pretty_print=True)
 #print(etree.tostring(root, pretty_print=True, encoding="unicode"))
-print(etree.tostring(prototyperoot, pretty_print=True, encoding="unicode"))
+#print(etree.tostring(prototyperoot, pretty_print=True, encoding="unicode"))
 # get prototypical file for modelling

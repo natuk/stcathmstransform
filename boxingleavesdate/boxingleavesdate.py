@@ -110,8 +110,11 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
             mydb.commit()
         else:
             surveytimespanuuidelement.text = row[13]
-        #surveytimespannotbeforeelement = etree.SubElement(surveytimespanelement, "surveytimespannotbefore")
-        #surveytimespannotbeforeelement.text = row[14]
+        if row[14] is not None:
+            surveytimespannotbeforeelement = etree.SubElement(surveytimespanelement, "surveytimespannotbefore")
+            surveytimespannotbeforeelement.text = str(row[14]).replace("00:00:00", "08:00:00").replace(" ", "T")
+            surveytimespannotafterelement = etree.SubElement(surveytimespanelement, "surveytimespannotafter")
+            surveytimespannotafterelement.text = str(row[14]).replace("00:00:00", "20:00:00").replace(" ", "T")
         # add it to root
         root.append(bookelement)
         # add it to the prototype root

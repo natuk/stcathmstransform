@@ -20,7 +20,7 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
         # height
         dimensionelement = etree.SubElement(bookelement, "dimension")
         dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
-        if row[3] is None:
+        if row[4] is None:
             newuuid = str(uuid.uuid4())
             dimensionuuidelement.text = newuuid
             # update the database
@@ -29,9 +29,9 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            dimensionuuidelement.text = row[3]
+            dimensionuuidelement.text = row[4]
         dimensionvalueelement = etree.SubElement(dimensionelement, "dimensionvalue")
-        dimensionvalueelement.text = str(row[2])
+        dimensionvalueelement.text = str(row[3])
         dimensiontypeelement = etree.SubElement(dimensionelement, "dimensiontype")
         dimensiontypeuuidelement = etree.SubElement(dimensiontypeelement, "dimensiontypeuuid")
         dimensiontypeuuidelement.text = escape("http://vocab.getty.edu/aat/300055644")
@@ -40,7 +40,7 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
         # width
         dimensionelement = etree.SubElement(bookelement, "dimension")
         dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
-        if row[5] is None:
+        if row[6] is None:
             newuuid = str(uuid.uuid4())
             dimensionuuidelement.text = newuuid
             # update the database
@@ -49,9 +49,9 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            dimensionuuidelement.text = row[5]
+            dimensionuuidelement.text = row[6]
         dimensionvalueelement = etree.SubElement(dimensionelement, "dimensionvalue")
-        dimensionvalueelement.text = str(row[4])
+        dimensionvalueelement.text = str(row[5])
         dimensiontypeelement = etree.SubElement(dimensionelement, "dimensiontype")
         dimensiontypeuuidelement = etree.SubElement(dimensiontypeelement, "dimensiontypeuuid")
         dimensiontypeuuidelement.text = escape("http://vocab.getty.edu/aat/300055647")
@@ -60,7 +60,7 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
         # thickness
         dimensionelement = etree.SubElement(bookelement, "dimension")
         dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
-        if row[7] is None:
+        if row[8] is None:
             newuuid = str(uuid.uuid4())
             dimensionuuidelement.text = newuuid
             # update the database
@@ -69,26 +69,26 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            dimensionuuidelement.text = row[7]
+            dimensionuuidelement.text = row[8]
         dimensionvalueelement = etree.SubElement(dimensionelement, "dimensionvalue")
-        dimensionvalueelement.text = str(row[6])
+        dimensionvalueelement.text = str(row[7])
         dimensiontypeelement = etree.SubElement(dimensionelement, "dimensiontype")
         dimensiontypeuuidelement = etree.SubElement(dimensiontypeelement, "dimensiontypeuuid")
         dimensiontypeuuidelement.text = escape("http://vocab.getty.edu/aat/300055646")
         dimensiontypelabelelement = etree.SubElement(dimensiontypeelement, "dimensiontypelabel")
         dimensiontypelabelelement.text = "thickness"
         # boxing status
-        if row[10] is not None:
-            boxingnote = row[10]
-            if row[11] is not None:
-                boxingnote = row[10] + " - " + row[11]
+        if row[11] is not None:
+            boxingnote = row[11]
+            if row[12] is not None:
+                boxingnote = row[11] + " - " + row[12]
                 boxingstatuselement = etree.SubElement(bookelement, "boxingstatusnotes")
                 boxingstatuselement.text = escape(boxingnote)
 
         # survey date
         surveyeventelement = etree.SubElement(bookelement, "surveyevent")
         surveyeventuuidelement = etree.SubElement(surveyeventelement, "surveyeventuuid")
-        if row[12] is None:
+        if row[13] is None:
             newuuid = str(uuid.uuid4())
             surveyeventuuidelement.text = newuuid
             # update the database
@@ -97,10 +97,10 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            surveyeventuuidelement.text = row[12]
+            surveyeventuuidelement.text = row[13]
         surveytimespanelement = etree.SubElement(surveyeventelement, "surveytimespan")
         surveytimespanuuidelement = etree.SubElement(surveytimespanelement, "surveytimespanuuid")
-        if row[13] is None:
+        if row[14] is None:
             newuuid = str(uuid.uuid4())
             surveytimespanuuidelement.text = newuuid
             # update the database
@@ -109,12 +109,12 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            surveytimespanuuidelement.text = row[13]
-        if row[14] is not None:
+            surveytimespanuuidelement.text = row[14]
+        if row[15] is not None:
             surveytimespannotbeforeelement = etree.SubElement(surveytimespanelement, "surveytimespannotbefore")
-            surveytimespannotbeforeelement.text = str(row[14]).replace("00:00:00", "08:00:00").replace(" ", "T")
+            surveytimespannotbeforeelement.text = str(row[15]).replace("00:00:00", "08:00:00").replace(" ", "T")
             surveytimespannotafterelement = etree.SubElement(surveytimespanelement, "surveytimespannotafter")
-            surveytimespannotafterelement.text = str(row[14]).replace("00:00:00", "20:00:00").replace(" ", "T")
+            surveytimespannotafterelement.text = str(row[15]).replace("00:00:00", "20:00:00").replace(" ", "T")
         # add it to root
         root.append(bookelement)
         # add it to the prototype root

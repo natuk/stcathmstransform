@@ -3,6 +3,7 @@ import mysql.connector
 # import all table specific scripts
 from mss import mss
 from boxingleavesdate import boxingleavesdate # 1-0-boaxingleavesdate
+from openingcharacteristics import openingcharacteristics # 1-1-openingcharacteristics
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -16,3 +17,4 @@ namespace = "https://data.ligatus.org.uk/stcatherines/ms/"
 
 mss.mss(mydb, cursor, cursorupdate)
 boxingleavesdate.boxingleavesdate(mydb, cursor, cursorupdate)
+openingcharacteristics.openingcharacteristics(mydb, cursor, cursorupdate)

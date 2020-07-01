@@ -17,8 +17,25 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
         bookelement = etree.Element("book")
         msuuidelement = etree.SubElement(bookelement, "msuuid")
         msuuidelement.text = row[1]
+        measurementelement = etree.SubElement(bookelement, "measurement")
+        measurementuuidelement = etree.SubElement(measurementelement, "measurementuuid")
+        if row[2] is None:
+            newuuid = str(uuid.uuid4())
+            measurementuuidelement.text = newuuid
+            # update the database
+            sql = "UPDATE 1_0_BoxingLeavesDate SET measurementuuid=%s WHERE msid=%s"
+            val = (newuuid, row[0])
+            cursorupdate.execute(sql, val)
+            mydb.commit()
+        else:
+            measurementuuidelement.text = row[2]
+        measurementtoolelement = etree.SubElement(measurementelement, "measurementtool")
+        measurementtooltypeuuidelement = etree.SubElement(measurementtoolelement, "measurementtooltypeuuid")
+        measurementtooltypeuuidelement.text = escape("http://stcath.measuringbox")
+        measurementtooltypelabelelement = etree.SubElement(measurementtoolelement, "measurementtooltypelabel")
+        measurementtooltypelabelelement.text = "measuring box"
         # height
-        dimensionelement = etree.SubElement(bookelement, "dimension")
+        dimensionelement = etree.SubElement(measurementelement, "dimension")
         dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
         if row[4] is None:
             newuuid = str(uuid.uuid4())
@@ -38,7 +55,7 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
         dimensiontypelabelelement = etree.SubElement(dimensiontypeelement, "dimensiontypelabel")
         dimensiontypelabelelement.text = "height"
         # width
-        dimensionelement = etree.SubElement(bookelement, "dimension")
+        dimensionelement = etree.SubElement(measurementelement, "dimension")
         dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
         if row[6] is None:
             newuuid = str(uuid.uuid4())
@@ -58,7 +75,7 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
         dimensiontypelabelelement = etree.SubElement(dimensiontypeelement, "dimensiontypelabel")
         dimensiontypelabelelement.text = "width"
         # thickness
-        dimensionelement = etree.SubElement(bookelement, "dimension")
+        dimensionelement = etree.SubElement(measurementelement, "dimension")
         dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
         if row[8] is None:
             newuuid = str(uuid.uuid4())

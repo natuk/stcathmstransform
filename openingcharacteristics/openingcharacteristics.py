@@ -16,41 +16,41 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
     for row in rows:
         bookelement = etree.Element("book")
         msuuidelement = etree.SubElement(bookelement, "msuuid")
-        msuuidelement.text = row[1]
+        msuuidelement.text = row["msuuid"]
         # measurement event
         measurementelement = etree.SubElement(bookelement, "measurement")
         measurementuuidelement = etree.SubElement(measurementelement, "measurementuuid")
-        if row[3] is None:
+        if row["measurementuuid"] is None:
             newuuid = str(uuid.uuid4())
             measurementuuidelement.text = newuuid
             # update the database
             sql = "UPDATE 1_1_OpeningCharacteristics SET measurementuuid=%s WHERE msid=%s"
-            val = (newuuid, row[0])
+            val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            measurementuuidelement.text = row[3]
+            measurementuuidelement.text = row["measurementuuid"]
         measurementtoolelement = etree.SubElement(measurementelement, "measurementtool")
         measurementtooltypeuuidelement = etree.SubElement(measurementtoolelement, "measurementtooltypeuuid")
         measurementtooltypeuuidelement.text = escape("http://vocab.getty.edu/aat/300022525")
         measurementtooltypelabelelement = etree.SubElement(measurementtoolelement, "measurementtooltypelabel")
         measurementtooltypelabelelement.text = "protractors"
         # left of centre
-        if row[4] is not None:
+        if row["leftofcentre"] is not None:
             leftofcentredimensionelement = etree.SubElement(measurementelement, "dimension")
             leftofcentredimensionuuidelement = etree.SubElement(leftofcentredimensionelement, "dimensionuuid")
-            if row[5] is None:
+            if row["leftofcentreuuid"] is None:
                 newuuid = str(uuid.uuid4())
                 leftofcentredimensionuuidelement.text = newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET leftofcentreuuid=%s WHERE msid=%s"
-                val = (newuuid, row[0])
+                val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                leftofcentredimensionuuidelement.text = row[5]
+                leftofcentredimensionuuidelement.text = row["leftofcentreuuid"]
             leftofcentredimensionvalueelement = etree.SubElement(leftofcentredimensionelement, "dimensionvalue")
-            leftofcentredimensionvalueelement.text = str(row[4])
+            leftofcentredimensionvalueelement.text = str(row["leftofcentre"])
             leftofcentredimensionunitelement = etree.SubElement(leftofcentredimensionelement, "dimensionunit")
             leftofcentredimensionunituuidelement = etree.SubElement(leftofcentredimensionunitelement, "dimensionunituuid")
             leftofcentredimensionunituuidelement.text = escape("http://stcath.degrees")
@@ -62,21 +62,21 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             leftofcentredimensiontypelabelelement = etree.SubElement(leftofcentredimensiontypeelement, "dimensiontypelabel")
             leftofcentredimensiontypelabelelement.text = "left of centre"
         # centre
-        if row[6] is not None:
+        if row["centre"] is not None:
             centredimensionelement = etree.SubElement(measurementelement, "dimension")
             centredimensionuuidelement = etree.SubElement(centredimensionelement, "dimensionuuid")
-            if row[7] is None:
+            if row["centreuuid"] is None:
                 newuuid = str(uuid.uuid4())
                 centredimensionuuidelement.text = newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET centreuuid=%s WHERE msid=%s"
-                val = (newuuid, row[0])
+                val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                centredimensionuuidelement.text = row[7]
+                centredimensionuuidelement.text = row["centreuuid"]
             centredimensionvalueelement = etree.SubElement(centredimensionelement, "dimensionvalue")
-            centredimensionvalueelement.text = str(row[6])
+            centredimensionvalueelement.text = str(row["centre"])
             centredimensionunitelement = etree.SubElement(centredimensionelement, "dimensionunit")
             centredimensionunituuidelement = etree.SubElement(centredimensionunitelement, "dimensionunituuid")
             centredimensionunituuidelement.text = escape("http://stcath.degrees")
@@ -88,21 +88,21 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             centredimensiontypelabelelement = etree.SubElement(centredimensiontypeelement, "dimensiontypelabel")
             centredimensiontypelabelelement.text = "centre"
         # right of centre
-        if row[8] is not None:
+        if row["rightofcentre"] is not None:
             rightofcentredimensionelement = etree.SubElement(measurementelement, "dimension")
             rightofcentredimensionuuidelement = etree.SubElement(rightofcentredimensionelement, "dimensionuuid")
-            if row[9] is None:
+            if row["rightofcentreuuid"] is None:
                 newuuid = str(uuid.uuid4())
                 rightofcentredimensionuuidelement.text = newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET rightofcentreuuid=%s WHERE msid=%s"
-                val = (newuuid, row[0])
+                val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                rightofcentredimensionuuidelement.text = row[9]
+                rightofcentredimensionuuidelement.text = row["rightofcentreuuid"]
             rightofcentredimensionvalueelement = etree.SubElement(rightofcentredimensionelement, "dimensionvalue")
-            rightofcentredimensionvalueelement.text = str(row[8])
+            rightofcentredimensionvalueelement.text = str(row["rightofcentre"])
             rightofcentredimensionunitelement = etree.SubElement(rightofcentredimensionelement, "dimensionunit")
             rightofcentredimensionunituuidelement = etree.SubElement(rightofcentredimensionunitelement, "dimensionunituuid")
             rightofcentredimensionunituuidelement.text = escape("http://stcath.degrees")
@@ -114,22 +114,22 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             rightofcentredimensiontypelabelelement = etree.SubElement(rightofcentredimensiontypeelement, "dimensiontypelabel")
             rightofcentredimensiontypelabelelement.text = "right of centre"
         # right board TODO: provision for -1 (broken/split) -2 (detached) -3 (missing)
-        if row[10] is not None:
-            if row[10] != -1 & row[10] != -2 & row[10] !=-3:
+        if row["rightboard"] is not None:
+            if row["rightboard"] != -1 & row["rightboard"] != -2 & row["rightboard"] !=-3:
                 rightboarddimensionelement = etree.SubElement(measurementelement, "dimension")
                 rightboarddimensionuuidelement = etree.SubElement(rightboarddimensionelement, "dimensionuuid")
-                if row[11] is None:
+                if row["rightboarduuid"] is None:
                     newuuid = str(uuid.uuid4())
                     rightofcentredimensionuuidelement.text = newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET rightboarduuid=%s WHERE msid=%s"
-                    val = (newuuid, row[0])
+                    val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    rightboarddimensionuuidelement.text = row[11]
+                    rightboarddimensionuuidelement.text = row["rightboarduuid"]
                 rightboarddimensionvalueelement = etree.SubElement(rightboarddimensionelement, "dimensionvalue")
-                rightboarddimensionvalueelement.text = str(row[10])
+                rightboarddimensionvalueelement.text = str(row["rightboard"])
                 rightboarddimensionunitelement = etree.SubElement(rightboarddimensionelement, "dimensionunit")
                 rightboarddimensionunituuidelement = etree.SubElement(rightboarddimensionunitelement, "dimensionunituuid")
                 rightboarddimensionunituuidelement.text = escape("http://stcath.degrees")
@@ -141,22 +141,22 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 rightboarddimensiontypelabelelement = etree.SubElement(rightboarddimensiontypeelement, "dimensiontypelabel")
                 rightboarddimensiontypelabelelement.text = "right board"
         # left board
-        if row[12] is not None:
-            if row[12] != -1 & row[12] != -2 & row[12] !=-3:
+        if row["leftboard"] is not None:
+            if row["leftboard"] != -1 & row["leftboard"] != -2 & row["leftboard"] !=-3:
                 leftboarddimensionelement = etree.SubElement(measurementelement, "dimension")
                 leftboarddimensionuuidelement = etree.SubElement(leftboarddimensionelement, "dimensionuuid")
-                if row[13] is None:
+                if row["leftboarduuid"] is None:
                     newuuid = str(uuid.uuid4())
                     leftofcentredimensionuuidelement.text = newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET leftboarduuid=%s WHERE msid=%s"
-                    val = (newuuid, row[0])
+                    val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    leftboarddimensionuuidelement.text = row[13]
+                    leftboarddimensionuuidelement.text = row["leftboarduuid"]
                 leftboarddimensionvalueelement = etree.SubElement(leftboarddimensionelement, "dimensionvalue")
-                leftboarddimensionvalueelement.text = str(row[12])
+                leftboarddimensionvalueelement.text = str(row["leftboard"])
                 leftboarddimensionunitelement = etree.SubElement(leftboarddimensionelement, "dimensionunit")
                 leftboarddimensionunituuidelement = etree.SubElement(leftboarddimensionunitelement, "dimensionunituuid")
                 leftboarddimensionunituuidelement.text = escape("http://stcath.degrees")
@@ -168,20 +168,20 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 leftboarddimensiontypelabelelement = etree.SubElement(leftboarddimensiontypeelement, "dimensiontypelabel")
                 leftboarddimensiontypelabelelement.text = "left board"
         # closed board min thickness
-        if row[14] is not None:
+        if row["closedbook"] is not None:
             closedbookelement = etree.SubElement(bookelement, "closedbook")
             closedbookmeasurementelement = etree.SubElement(closedbookelement, "closedbookmeasurement")
             closedbookmeasurementuuidelement = etree.SubElement(closedbookmeasurementelement, "closedbookmeasurementuuid")
-            if row[15] is None:
+            if row["closedbookmeasurementuuid"] is None:
                 newuuid = str(uuid.uuid4())
                 closedbookmeasurementuuidelement.text = newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET closedbookmeasurementuuid=%s WHERE msid=%s"
-                val = (newuuid, row[0])
+                val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                closedbookmeasurementuuidelement.text = row[15]
+                closedbookmeasurementuuidelement.text = row["closedbookmeasurementuuid"]
             closedbookmeasurementtoolelement = etree.SubElement(closedbookmeasurementelement, "closedbookmeasurementtool")
             closedbookmeasurementtooltypeuuidelement = etree.SubElement(closedbookmeasurementtoolelement, "closedbookmeasurementtooltypeuuid")
             closedbookmeasurementtooltypeuuidelement.text = escape("http://vocab.getty.edu/aat/300266529")
@@ -189,18 +189,18 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             closedbookmeasurementtooltypelabelelement.text = "rulers"
             closedbookdimensionelement = etree.SubElement(closedbookmeasurementelement, "closedbookdimension")
             closedbookdimensionuuidelement = etree.SubElement(closedbookdimensionelement, "dimensionuuid")
-            if row[16] is None:
+            if row["closedbookdimensionuuid"] is None:
                 newuuid = str(uuid.uuid4())
                 closedbookdimensionuuidelement.text = newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET closedbookdimensionuuid=%s WHERE msid=%s"
-                val = (newuuid, row[0])
+                val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                closedbookdimensionuuidelement.text = row[16]
+                closedbookdimensionuuidelement.text = row["closedbookdimensionuuid"]
             closedbookdimensionvalueelement = etree.SubElement(closedbookdimensionelement, "dimensionvalue")
-            closedbookdimensionvalueelement.text = str(row[14])
+            closedbookdimensionvalueelement.text = str(row["closedbook"])
             closedbookdimensionunitelement = etree.SubElement(closedbookdimensionelement, "dimensionunit")
             closedbookdimensionunituuidelement = etree.SubElement(closedbookdimensionunitelement, "dimensionunituuid")
             closedbookdimensionunituuidelement.text = escape("http://vocab.getty.edu/aat/300379097")
@@ -212,35 +212,35 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             closedbookdimensiontypelabelelement = etree.SubElement(closedbookdimensiontypeelement, "dimensiontypelabel")
             closedbookdimensiontypelabelelement.text = "closed book thickness"
         # textblockbreaks
-        if row[17] is not None:
-            if row[17] < 10:
+        if row["textblockbreaks"] is not None:
+            if row["textblockbreaks"] < 10:
                 textblockbreakselement = etree.SubElement(bookelement, "textblockbreaks")
                 textblockbreaksmeasurementelement = etree.SubElement(textblockbreakselement, "textblockbreaksmeasurement")
                 textblockbreaksmeasurementuuidelement = etree.SubElement(textblockbreaksmeasurementelement, "textblockbreaksmeasurementuuid")
-                if row[18] is None:
+                if row["textblockbreaksmeasurementuuid"] is None:
                     newuuid = str(uuid.uuid4())
                     textblockbreaksmeasurementuuidelement.text = newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET textblockbreaksmeasurementuuid=%s WHERE msid=%s"
-                    val = (newuuid, row[0])
+                    val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    textblockbreaksmeasurementuuidelement.text = row[18]
+                    textblockbreaksmeasurementuuidelement.text = row["textblockbreaksmeasurementuuid"]
                 textblockbreaksdimensionelement = etree.SubElement(textblockbreaksmeasurementelement, "textblockbreaksdimension")
                 textblockbreaksdimensionuuidelement = etree.SubElement(textblockbreaksdimensionelement, "dimensionuuid")
-                if row[19] is None:
+                if row["textblockbreaksdimensionuuid"] is None:
                     newuuid = str(uuid.uuid4())
                     textblockbreaksdimensionuuidelement.text = newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET textblockbreaksdimensionuuid=%s WHERE msid=%s"
-                    val = (newuuid, row[0])
+                    val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    textblockbreaksdimensionuuidelement.text = row[19]
+                    textblockbreaksdimensionuuidelement.text = row["textblockbreaksdimensionuuid"]
                 textblockbreaksdimensionvalueelement = etree.SubElement(textblockbreaksdimensionelement, "dimensionvalue")
-                textblockbreaksdimensionvalueelement.text = str(row[17])
+                textblockbreaksdimensionvalueelement.text = str(row["textblockbreaks"])
                 textblockbreaksdimensionunitelement = etree.SubElement(textblockbreaksdimensionelement, "dimensionunit")
                 textblockbreaksdimensionunituuidelement = etree.SubElement(textblockbreaksdimensionunitelement, "dimensionunituuid")
                 textblockbreaksdimensionunituuidelement.text = escape("http://stcath.textblockbreaks")

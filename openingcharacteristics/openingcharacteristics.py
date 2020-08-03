@@ -3,7 +3,7 @@ import uuid
 from html import escape
 from getprototype import getprototype
 
-def openingcharacteristics(mydb, cursor, cursorupdate):
+def openingcharacteristics(mydb, cursor, cursorupdate, namespace):
     # 1_1_OpeningCharacteristics
     cursor.execute("SELECT * FROM 1_1_OpeningCharacteristics")
     rows = cursor.fetchall()
@@ -11,25 +11,24 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
     root = etree.Element("root")
     # root for prototype document for mapping
     prototyperoot = etree.Element("root")
-    prototypeneeded = True
 
     for row in rows:
         bookelement = etree.Element("book")
         msuuidelement = etree.SubElement(bookelement, "msuuid")
-        msuuidelement.text = row["msuuid"]
+        msuuidelement.text = namespace + row["msuuid"]
         # measurement event
         measurementelement = etree.SubElement(bookelement, "measurement")
         measurementuuidelement = etree.SubElement(measurementelement, "measurementuuid")
         if row["measurementuuid"] is None:
             newuuid = str(uuid.uuid4())
-            measurementuuidelement.text = newuuid
+            measurementuuidelement.text = namespace + newuuid
             # update the database
             sql = "UPDATE 1_1_OpeningCharacteristics SET measurementuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            measurementuuidelement.text = row["measurementuuid"]
+            measurementuuidelement.text = namespace + row["measurementuuid"]
         measurementtoolelement = etree.SubElement(measurementelement, "measurementtool")
         measurementtooltypeuuidelement = etree.SubElement(measurementtoolelement, "measurementtooltypeuuid")
         measurementtooltypeuuidelement.text = escape("http://vocab.getty.edu/aat/300022525")
@@ -41,14 +40,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             leftofcentredimensionuuidelement = etree.SubElement(leftofcentredimensionelement, "dimensionuuid")
             if row["leftofcentreuuid"] is None:
                 newuuid = str(uuid.uuid4())
-                leftofcentredimensionuuidelement.text = newuuid
+                leftofcentredimensionuuidelement.text = namespace + newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET leftofcentreuuid=%s WHERE msid=%s"
                 val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                leftofcentredimensionuuidelement.text = row["leftofcentreuuid"]
+                leftofcentredimensionuuidelement.text = namespace + row["leftofcentreuuid"]
             leftofcentredimensionvalueelement = etree.SubElement(leftofcentredimensionelement, "dimensionvalue")
             leftofcentredimensionvalueelement.text = str(row["leftofcentre"])
             leftofcentredimensionunitelement = etree.SubElement(leftofcentredimensionelement, "dimensionunit")
@@ -67,14 +66,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             centredimensionuuidelement = etree.SubElement(centredimensionelement, "dimensionuuid")
             if row["centreuuid"] is None:
                 newuuid = str(uuid.uuid4())
-                centredimensionuuidelement.text = newuuid
+                centredimensionuuidelement.text = namespace + newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET centreuuid=%s WHERE msid=%s"
                 val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                centredimensionuuidelement.text = row["centreuuid"]
+                centredimensionuuidelement.text = namespace + row["centreuuid"]
             centredimensionvalueelement = etree.SubElement(centredimensionelement, "dimensionvalue")
             centredimensionvalueelement.text = str(row["centre"])
             centredimensionunitelement = etree.SubElement(centredimensionelement, "dimensionunit")
@@ -93,14 +92,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             rightofcentredimensionuuidelement = etree.SubElement(rightofcentredimensionelement, "dimensionuuid")
             if row["rightofcentreuuid"] is None:
                 newuuid = str(uuid.uuid4())
-                rightofcentredimensionuuidelement.text = newuuid
+                rightofcentredimensionuuidelement.text = namespace + newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET rightofcentreuuid=%s WHERE msid=%s"
                 val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                rightofcentredimensionuuidelement.text = row["rightofcentreuuid"]
+                rightofcentredimensionuuidelement.text = namespace + row["rightofcentreuuid"]
             rightofcentredimensionvalueelement = etree.SubElement(rightofcentredimensionelement, "dimensionvalue")
             rightofcentredimensionvalueelement.text = str(row["rightofcentre"])
             rightofcentredimensionunitelement = etree.SubElement(rightofcentredimensionelement, "dimensionunit")
@@ -120,14 +119,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 rightboarddimensionuuidelement = etree.SubElement(rightboarddimensionelement, "dimensionuuid")
                 if row["rightboarduuid"] is None:
                     newuuid = str(uuid.uuid4())
-                    rightofcentredimensionuuidelement.text = newuuid
+                    rightofcentredimensionuuidelement.text = namespace + newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET rightboarduuid=%s WHERE msid=%s"
                     val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    rightboarddimensionuuidelement.text = row["rightboarduuid"]
+                    rightboarddimensionuuidelement.text = namespace + row["rightboarduuid"]
                 rightboarddimensionvalueelement = etree.SubElement(rightboarddimensionelement, "dimensionvalue")
                 rightboarddimensionvalueelement.text = str(row["rightboard"])
                 rightboarddimensionunitelement = etree.SubElement(rightboarddimensionelement, "dimensionunit")
@@ -147,14 +146,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 leftboarddimensionuuidelement = etree.SubElement(leftboarddimensionelement, "dimensionuuid")
                 if row["leftboarduuid"] is None:
                     newuuid = str(uuid.uuid4())
-                    leftofcentredimensionuuidelement.text = newuuid
+                    leftofcentredimensionuuidelement.text = namespace + newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET leftboarduuid=%s WHERE msid=%s"
                     val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    leftboarddimensionuuidelement.text = row["leftboarduuid"]
+                    leftboarddimensionuuidelement.text = namespace + row["leftboarduuid"]
                 leftboarddimensionvalueelement = etree.SubElement(leftboarddimensionelement, "dimensionvalue")
                 leftboarddimensionvalueelement.text = str(row["leftboard"])
                 leftboarddimensionunitelement = etree.SubElement(leftboarddimensionelement, "dimensionunit")
@@ -174,14 +173,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             closedbookmeasurementuuidelement = etree.SubElement(closedbookmeasurementelement, "closedbookmeasurementuuid")
             if row["closedbookmeasurementuuid"] is None:
                 newuuid = str(uuid.uuid4())
-                closedbookmeasurementuuidelement.text = newuuid
+                closedbookmeasurementuuidelement.text = namespace + newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET closedbookmeasurementuuid=%s WHERE msid=%s"
                 val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                closedbookmeasurementuuidelement.text = row["closedbookmeasurementuuid"]
+                closedbookmeasurementuuidelement.text = namespace + row["closedbookmeasurementuuid"]
             closedbookmeasurementtoolelement = etree.SubElement(closedbookmeasurementelement, "closedbookmeasurementtool")
             closedbookmeasurementtooltypeuuidelement = etree.SubElement(closedbookmeasurementtoolelement, "closedbookmeasurementtooltypeuuid")
             closedbookmeasurementtooltypeuuidelement.text = escape("http://vocab.getty.edu/aat/300266529")
@@ -191,14 +190,14 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
             closedbookdimensionuuidelement = etree.SubElement(closedbookdimensionelement, "dimensionuuid")
             if row["closedbookdimensionuuid"] is None:
                 newuuid = str(uuid.uuid4())
-                closedbookdimensionuuidelement.text = newuuid
+                closedbookdimensionuuidelement.text = namespace + newuuid
                 # update the database
                 sql = "UPDATE 1_1_OpeningCharacteristics SET closedbookdimensionuuid=%s WHERE msid=%s"
                 val = (newuuid, row["msid"])
                 cursorupdate.execute(sql, val)
                 mydb.commit()
             else:
-                closedbookdimensionuuidelement.text = row["closedbookdimensionuuid"]
+                closedbookdimensionuuidelement.text = namespace + row["closedbookdimensionuuid"]
             closedbookdimensionvalueelement = etree.SubElement(closedbookdimensionelement, "dimensionvalue")
             closedbookdimensionvalueelement.text = str(row["closedbook"])
             closedbookdimensionunitelement = etree.SubElement(closedbookdimensionelement, "dimensionunit")
@@ -219,26 +218,26 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 textblockbreaksmeasurementuuidelement = etree.SubElement(textblockbreaksmeasurementelement, "textblockbreaksmeasurementuuid")
                 if row["textblockbreaksmeasurementuuid"] is None:
                     newuuid = str(uuid.uuid4())
-                    textblockbreaksmeasurementuuidelement.text = newuuid
+                    textblockbreaksmeasurementuuidelement.text = namespace + newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET textblockbreaksmeasurementuuid=%s WHERE msid=%s"
                     val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    textblockbreaksmeasurementuuidelement.text = row["textblockbreaksmeasurementuuid"]
+                    textblockbreaksmeasurementuuidelement.text = namespace + row["textblockbreaksmeasurementuuid"]
                 textblockbreaksdimensionelement = etree.SubElement(textblockbreaksmeasurementelement, "textblockbreaksdimension")
                 textblockbreaksdimensionuuidelement = etree.SubElement(textblockbreaksdimensionelement, "dimensionuuid")
                 if row["textblockbreaksdimensionuuid"] is None:
                     newuuid = str(uuid.uuid4())
-                    textblockbreaksdimensionuuidelement.text = newuuid
+                    textblockbreaksdimensionuuidelement.text = namespace + newuuid
                     # update the database
                     sql = "UPDATE 1_1_OpeningCharacteristics SET textblockbreaksdimensionuuid=%s WHERE msid=%s"
                     val = (newuuid, row["msid"])
                     cursorupdate.execute(sql, val)
                     mydb.commit()
                 else:
-                    textblockbreaksdimensionuuidelement.text = row["textblockbreaksdimensionuuid"]
+                    textblockbreaksdimensionuuidelement.text = namespace + row["textblockbreaksdimensionuuid"]
                 textblockbreaksdimensionvalueelement = etree.SubElement(textblockbreaksdimensionelement, "dimensionvalue")
                 textblockbreaksdimensionvalueelement.text = str(row["textblockbreaks"])
                 textblockbreaksdimensionunitelement = etree.SubElement(textblockbreaksdimensionelement, "dimensionunit")
@@ -253,12 +252,10 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 textblockbreaksdimensiontypelabelelement.text = "number of textblock breaks"
         # add it to root
         root.append(bookelement)
-        # add it to the prototype root
-        if prototypeneeded:
-            prototypeneeded, prototyperoot = getprototype(row, prototypeneeded, prototyperoot, bookelement)
 
     tree = etree.ElementTree(root)
     tree.write(open('openingcharacteristics/1-1-openingcharacteristics.xml', 'wb'), encoding='utf-8', pretty_print=True)
+    prototyperoot = getprototype(root, prototyperoot)
     prototypetree = etree.ElementTree(prototyperoot)
     prototypetree.write(open('openingcharacteristics/1-1-openingcharacteristics-prototype.xml', 'wb'), encoding='utf-8', pretty_print=True)
     #print(etree.tostring(root, pretty_print=True, encoding="unicode"))

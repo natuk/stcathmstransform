@@ -1,4 +1,5 @@
 import mysql.connector
+from rdflib import Graph, Namespace, URIRef
 
 # import all table specific scripts
 from mss import mss
@@ -16,9 +17,18 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor(dictionary=True)
 cursorupdate = mydb.cursor(buffered=True)
 #namespace = escape("https://data.ligatus.org.uk/stcatherines/ms/")
-namespace = "https://data.ligatus.org.uk/stcatherines/ms/"
 
-mss.mss(mydb, cursor, cursorupdate, namespace)
-boxingleavesdate.boxingleavesdate(mydb, cursor, cursorupdate, namespace)
-openingcharacteristics.openingcharacteristics(mydb, cursor, cursorupdate, namespace)
-pagemarkers.pagemarkers(mydb, cursor, cursorupdate, namespace)
+graph = Graph()
+# add Ligatus's namespace
+STCATH = Namespace('https://data.ligatus.org.uk/stcatherines/ms/')
+graph.bind('stcath', STCATH)
+# add CIDOC-CRM's namespace and prefix
+CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
+graph.bind('crm', CRM)
+
+mss.mss(mydb, cursor, cursorupdate, graph, STCATH, CRM)
+#boxingleavesdate.boxingleavesdate(mydb, cursor, cursorupdate, namespace, graph, CRM)
+#openingcharacteristics.openingcharacteristics(mydb, cursor, cursorupdate, namespace, graph, CRM)
+#pagemarkers.pagemarkers(mydb, cursor, cursorupdate, namespace, graph, CRM)
+
+graph.serialize(destination='output.ttl', format='turtle', encoding="utf-8")

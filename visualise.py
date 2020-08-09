@@ -112,23 +112,4 @@ def get_doccolour(entitylabel, crmgraph):
                 if str(parentitylabel[1]) in doccolour:  # if the entity itself has a colour then use it
                     return (doccolour[str(parentitylabel[1])])
 
-    # find superclasses of the entity
-    # results = crmgraph.query(
-    #     """
-    #     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    #
-    #     SELECT DISTINCT ?ol
-    #         WHERE {
-    #             ?s rdfs:subClassOf* ?o .
-    #             ?o rdfs:label ?ol .
-    #             ?s rdfs:label ?sl .
-    #             FILTER (?sl='""" + entity + """') .
-    #             FILTER (LANG(?ol) = "en") .
-    #         }
-    #         """)
-    #
-    # for result in results:
-    #     if result in doccolour:  # if the entity itself has a colour then use it
-    #         return (doccolour[result])
-
     return "#ffffff" # if everything fails, return white

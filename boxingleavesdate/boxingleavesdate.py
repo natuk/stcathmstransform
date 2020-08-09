@@ -1,159 +1,125 @@
-from lxml import etree as etree
+from rdflib import Graph, Literal, URIRef
+from rdflib.namespace import SKOS, RDF, RDFS
 import uuid
-from html import escape
-from getprototype import getprototype
+from namespaces import apply_namespaces, get_namespace
 
-def boxingleavesdate(mydb, cursor, cursorupdate, namespace):
-    # 1_0_BoxingLeavesDate, namespace
+def boxingleavesdate(mydb, cursor, cursorupdate):
+    graph = Graph()
+    # add namespaces
+    graph = apply_namespaces(graph)
+    # get the ones we need here
+    STCATH = get_namespace(graph, 'stcath')
+    CRM = get_namespace(graph, 'crm')
+
+    # deal with thesaurus concepts
+    graph.add((URIRef("http://stcath.measuringbox"), RDF.type, CRM["E55_Type"]))
+    graph.add((URIRef("http://stcath.measuringbox"), RDF.type, SKOS.Concept))
+    graph.add((URIRef("http://stcath.measuringbox"), SKOS.prefLabel, Literal("measuring boxes")))
+    graph.add((URIRef("http://vocab.getty.edu/aat/300055644"), RDF.type, CRM["E55_Type"]))  # height
+    graph.add((URIRef("http://vocab.getty.edu/aat/300055647"), RDF.type, CRM["E55_Type"]))  # width
+    graph.add((URIRef("http://vocab.getty.edu/aat/300055646"), RDF.type, CRM["E55_Type"]))  # thickness
+    graph.add((URIRef("http://vocab.getty.edu/aat/300379097"), RDF.type, CRM["E58_Measurement_Unit"])) # mm
+
+    # 1_0_BoxingLeavesDate
     cursor.execute("SELECT * FROM 1_0_BoxingLeavesDate")
     rows = cursor.fetchall()
-    # root for main data
-    root = etree.Element("root")
-    # root for prototype document for mapping
-    prototyperoot = etree.Element("root")
 
     for row in rows:
-        bookelement = etree.Element("book")
-        msuuidelement = etree.SubElement(bookelement, "msuuid")
-        msuuidelement.text = namespace + row["msuuid"]
-        measurementelement = etree.SubElement(bookelement, "measurement")
-        measurementuuidelement = etree.SubElement(measurementelement, "measurementuuid")
-        if row["measurementuuid"] is None:
+        msuuid = URIRef(row["msuuid"], str(STCATH))
+        if row["measurementuuid"] is None: # if there is no measurementuuid, make one
             newuuid = str(uuid.uuid4())
-            measurementuuidelement.text = namespace + newuuid
+            measurementuuid = URIRef(newuuid, str(STCATH))
             # update the database
             sql = "UPDATE 1_0_BoxingLeavesDate SET measurementuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
-        else:
-            measurementuuidelement.text = namespace + row["measurementuuid"]
-        measurementtoolelement = etree.SubElement(measurementelement, "measurementtool")
-        measurementtooltypeuuidelement = etree.SubElement(measurementtoolelement, "measurementtooltypeuuid")
-        measurementtooltypeuuidelement.text = escape("http://stcath.measuringbox")
-        measurementtooltypelabelelement = etree.SubElement(measurementtoolelement, "measurementtooltypelabel")
-        measurementtooltypelabelelement.text = "measuring box"
+        else: # else just fetch it
+            measurementuuid = URIRef(row["measurementuuid"], str(STCATH))
+        graph.add((measurementuuid, RDF.type, CRM["E16_Measurement"])) # rdf type the measurement
+        graph.add((measurementuuid, CRM["P39_measured"], msuuid)) # measurement event measured the manuscript
+        graph.add((measurementuuid, CRM["P125_used_object_of_type"], URIRef("http://stcath.measuringbox"))) # measurement used measuring box
         # height
-        dimensionelement = etree.SubElement(measurementelement, "dimension")
-        dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
         if row["heightuuid"] is None:
             newuuid = str(uuid.uuid4())
-            dimensionuuidelement.text = namespace + newuuid
+            dimensionuuid = URIRef(newuuid, str(STCATH))
             # update the database
             sql = "UPDATE 1_0_BoxingLeavesDate SET heightuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            dimensionuuidelement.text = namespace + row["heightuuid"]
-        dimensionvalueelement = etree.SubElement(dimensionelement, "dimensionvalue")
-        dimensionvalueelement.text = str(row["height"])
-        dimensiontypeelement = etree.SubElement(dimensionelement, "dimensiontype")
-        dimensiontypeuuidelement = etree.SubElement(dimensiontypeelement, "dimensiontypeuuid")
-        dimensiontypeuuidelement.text = escape("http://vocab.getty.edu/aat/300055644")
-        dimensiontypelabelelement = etree.SubElement(dimensiontypeelement, "dimensiontypelabel")
-        dimensiontypelabelelement.text = "height"
-        dimensionunitelement = etree.SubElement(dimensionelement, "dimensionunit")
-        dimensionunituuidelement = etree.SubElement(dimensionunitelement, "dimensionunituuid")
-        dimensionunituuidelement.text = escape("http://vocab.getty.edu/aat/300379097")
-        dimensionunitlabelelement = etree.SubElement(dimensionunitelement, "dimensionunitlabel")
-        dimensionunitlabelelement.text = "mm"
+            dimensionuuid = URIRef(row["heightuuid"], str(STCATH))
+        graph.add((dimensionuuid, RDF.type, CRM["E54_Dimension"])) # rdf type the dimension
+        graph.add((measurementuuid, CRM["P40_observed_dimension"], dimensionuuid)) # measurement observes the dimension
+        graph.add((dimensionuuid, CRM["P2_has_type"], URIRef("http://vocab.getty.edu/aat/300055644"))) # dimension has type height
+        graph.add((dimensionuuid, CRM["P90_has_value"], Literal(str(row["height"])))) # dimension has value from the db
+        graph.add((dimensionuuid, CRM["P91_has_unit"], URIRef("http://vocab.getty.edu/aat/300379097"))) # dimension has unit mm
         # width
-        dimensionelement = etree.SubElement(measurementelement, "dimension")
-        dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
         if row["widthuuid"] is None:
             newuuid = str(uuid.uuid4())
-            dimensionuuidelement.text = namespace + newuuid
+            dimensionuuid = URIRef(newuuid, str(STCATH))
             # update the database
             sql = "UPDATE 1_0_BoxingLeavesDate SET widthuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            dimensionuuidelement.text = namespace + row["widthuuid"]
-        dimensionvalueelement = etree.SubElement(dimensionelement, "dimensionvalue")
-        dimensionvalueelement.text = str(row["width"])
-        dimensiontypeelement = etree.SubElement(dimensionelement, "dimensiontype")
-        dimensiontypeuuidelement = etree.SubElement(dimensiontypeelement, "dimensiontypeuuid")
-        dimensiontypeuuidelement.text = escape("http://vocab.getty.edu/aat/300055647")
-        dimensiontypelabelelement = etree.SubElement(dimensiontypeelement, "dimensiontypelabel")
-        dimensiontypelabelelement.text = "width"
-        dimensionunitelement = etree.SubElement(dimensionelement, "dimensionunit")
-        dimensionunituuidelement = etree.SubElement(dimensionunitelement, "dimensionunituuid")
-        dimensionunituuidelement.text = escape("http://vocab.getty.edu/aat/300379097")
-        dimensionunitlabelelement = etree.SubElement(dimensionunitelement, "dimensionunitlabel")
-        dimensionunitlabelelement.text = "mm"
+            dimensionuuid = URIRef(row["widthuuid"], str(STCATH))
+        graph.add((dimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+        graph.add((measurementuuid, CRM["P40_observed_dimension"], dimensionuuid))  # measurement observes the dimension
+        graph.add((dimensionuuid, CRM["P2_has_type"], URIRef("http://vocab.getty.edu/aat/300055647")))  # dimension has type width
+        graph.add((dimensionuuid, CRM["P90_has_value"], Literal(str(row["width"]))))  # dimension has value from the db
+        graph.add((dimensionuuid, CRM["P91_has_unit"], URIRef("http://vocab.getty.edu/aat/300379097")))  # dimension has unit mm
         # thickness
-        dimensionelement = etree.SubElement(measurementelement, "dimension")
-        dimensionuuidelement = etree.SubElement(dimensionelement, "dimensionuuid")
         if row["thicknessuuid"] is None:
             newuuid = str(uuid.uuid4())
-            dimensionuuidelement.text = namespace + newuuid
+            dimensionuuid = URIRef(newuuid, str(STCATH))
             # update the database
             sql = "UPDATE 1_0_BoxingLeavesDate SET thicknessuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            dimensionuuidelement.text = namespace + row["thicknessuuid"]
-        dimensionvalueelement = etree.SubElement(dimensionelement, "dimensionvalue")
-        dimensionvalueelement.text = str(row["thickness"])
-        dimensiontypeelement = etree.SubElement(dimensionelement, "dimensiontype")
-        dimensiontypeuuidelement = etree.SubElement(dimensiontypeelement, "dimensiontypeuuid")
-        dimensiontypeuuidelement.text = escape("http://vocab.getty.edu/aat/300055646")
-        dimensiontypelabelelement = etree.SubElement(dimensiontypeelement, "dimensiontypelabel")
-        dimensiontypelabelelement.text = "thickness"
-        dimensionunitelement = etree.SubElement(dimensionelement, "dimensionunit")
-        dimensionunituuidelement = etree.SubElement(dimensionunitelement, "dimensionunituuid")
-        dimensionunituuidelement.text = escape("http://vocab.getty.edu/aat/300379097")
-        dimensionunitlabelelement = etree.SubElement(dimensionunitelement, "dimensionunitlabel")
-        dimensionunitlabelelement.text = "mm"
+            dimensionuuid = URIRef(row["thicknessuuid"], str(STCATH))
+        graph.add((dimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+        graph.add((measurementuuid, CRM["P40_observed_dimension"], dimensionuuid))  # measurement observes the dimension
+        graph.add((dimensionuuid, CRM["P2_has_type"], URIRef("http://vocab.getty.edu/aat/300055646")))  # dimension has type thickness
+        graph.add((dimensionuuid, CRM["P90_has_value"], Literal(str(row["thickness"]))))  # dimension has value from the db
+        graph.add((dimensionuuid, CRM["P91_has_unit"], URIRef("http://vocab.getty.edu/aat/300379097")))  # dimension has unit mm
         # boxing status
         if row["boxingstatus"] is not None:
             boxingnote = row["boxingstatus"]
             if row["boxingnotes"] is not None:
                 boxingnote = row["boxingstatus"] + " - " + row["boxingnotes"]
-                boxingstatuselement = etree.SubElement(bookelement, "boxingstatusnotes")
-                boxingstatuselement.text = escape(boxingnote)
-
+            graph.add((msuuid, CRM["P3_has_note"], Literal(boxingnote)))  # add boxing notes as a note to the manuscript node
         # survey date
-        surveyeventelement = etree.SubElement(bookelement, "surveyevent")
-        surveyeventuuidelement = etree.SubElement(surveyeventelement, "surveyeventuuid")
         if row["surveyeventuuid"] is None:
             newuuid = str(uuid.uuid4())
-            surveyeventuuidelement.text = namespace + newuuid
+            surveyeventuuid = URIRef(newuuid, str(STCATH))
             # update the database
             sql = "UPDATE 1_0_BoxingLeavesDate SET surveyeventuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            surveyeventuuidelement.text = namespace + row["surveyeventuuid"]
-        surveytimespanelement = etree.SubElement(surveyeventelement, "surveytimespan")
-        surveytimespanuuidelement = etree.SubElement(surveytimespanelement, "surveytimespanuuid")
+            surveyeventuuid = URIRef(row["surveyeventuuid"], str(STCATH))
+        graph.add((surveyeventuuid, RDF.type, CRM["E13_Attribute_Assignment"])) # rdf type the survey event
         if row["surveytimespanuuid"] is None:
             newuuid = str(uuid.uuid4())
-            surveytimespanuuidelement.text = namespace + newuuid
+            surveytimespanuuid = URIRef(newuuid, str(STCATH))
             # update the database
             sql = "UPDATE 1_0_BoxingLeavesDate SET surveytimespanuuid=%s WHERE msid=%s"
             val = (newuuid, row["msid"])
             cursorupdate.execute(sql, val)
             mydb.commit()
         else:
-            surveytimespanuuidelement.text = namespace + row["surveytimespanuuid"]
+            surveytimespanuuid = URIRef(row["surveytimespanuuid"], str(STCATH))
+        graph.add((surveytimespanuuid, RDF.type, CRM["E52_Time-Span"]))  # rdf type the survey event time-span
+        graph.add((surveyeventuuid, CRM["P4_has_time-span"], surveytimespanuuid))  # survey event has time-span
         if row["surveydate"] is not None:
-            surveytimespannotbeforeelement = etree.SubElement(surveytimespanelement, "surveytimespannotbefore")
-            surveytimespannotbeforeelement.text = str(row["surveydate"]).replace("00:00:00", "08:00:00").replace(" ", "T")
-            surveytimespannotafterelement = etree.SubElement(surveytimespanelement, "surveytimespannotafter")
-            surveytimespannotafterelement.text = str(row["surveydate"]).replace("00:00:00", "20:00:00").replace(" ", "T")
-        # add it to root
-        root.append(bookelement)
+            graph.add((surveytimespanuuid, CRM["P82a_begin_of_the_begin"], Literal(str(row["surveydate"]).replace("00:00:00", "08:00:00").replace(" ", "T"))))
+            graph.add((surveytimespanuuid, CRM["P82b_end_of_the_end"], Literal(str(row["surveydate"]).replace("00:00:00", "20:00:00").replace(" ", "T"))))
 
-    tree = etree.ElementTree(root)
-    tree.write(open('boxingleavesdate/1-0-boxingleavesdate.xml', 'wb'), encoding='utf-8', pretty_print=True)
-    prototyperoot = getprototype(root, prototyperoot)
-    prototypetree = etree.ElementTree(prototyperoot)
-    prototypetree.write(open('boxingleavesdate/1-0-boxingleavesdate-prototype.xml', 'wb'), encoding='utf-8', pretty_print=True)
-    #print(etree.tostring(root, pretty_print=True, encoding="unicode"))
-    #print(etree.tostring(prototyperoot, pretty_print=True, encoding="unicode"))
-    # get prototypical file for modelling
+    # serialise the graph
+    graph.serialize(destination='boxingleavesdate/1-0-boxingleavesdate.ttl', format='turtle', encoding="utf-8")

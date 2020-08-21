@@ -30,7 +30,7 @@ def boxingleavesdate(mydb, cursor, cursorupdate):
     doci = 1  # set the desirable db row for the documentation example
 
     # 1_0_BoxingLeavesDate
-    cursor.execute("SELECT mss.cataloguename, mss.msuuid, bld.* FROM 1_0_BoxingLeavesDate bld INNER JOIN MSs mss ON mss.id = bld.msid LIMIT 2")
+    cursor.execute("SELECT mss.cataloguename, mss.msuuid, bld.* FROM 1_0_BoxingLeavesDate bld INNER JOIN MSs mss ON mss.id = bld.msid")
     rows = cursor.fetchall()
 
     for i, row in enumerate(rows):

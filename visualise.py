@@ -38,7 +38,7 @@ def visualise_graph(graph, comment):
         # create graphviz nodes with new uuids for literals to avoid literals appear as class nodes
         if type(obj) is rdflib.Literal:
             newuuid = str(uuid.uuid4()).replace("-", "")
-            objgnode = newuuid + str(obj)
+            objgnode = newuuid
         # always create a new instance of predgnode otherwise if the predicates are used multiple times we produce spider-like drawings
         predgnode = subjgnode + predgnode + objgnode
 

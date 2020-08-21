@@ -3,6 +3,7 @@ from rdflib import Graph, URIRef, Literal
 from rdflib.namespace import SKOS, RDF, RDFS
 from namespaces import get_prefix_uri
 import rdflib.term
+import uuid
 
 def visualise_graph(graph, comment):
     # graph is the rdflib graph being visualised and dot is the graphviz Digraph of the visualisation
@@ -23,67 +24,59 @@ def visualise_graph(graph, comment):
     # prepare nodes first
     nodes = {}  # local dictionary holding nodes
     # for every rdf:type triple in the graph3
-    for subj, pred, obj in graph.triples((None, RDF.type, None)):
-        # remove ":" from the node names as graphviz gives a special meaning to them see https://graphviz.readthedocs.io/en/stable/manual.html#ports
-        # remove "/", ".", "-" as well as they are problematic
-        subjgnode = str(subj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
-        objgnode = str(obj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
-        predgnode = str(pred).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
-
-        # always create a new instance of predgnode and otherwise if the predicates is used multiple times we produce spider-like drawings
-        predgnode = subjgnode + predgnode + objgnode
-
-        try:
-            subjlabel = str(uniongraph.preferredLabel(subj, lang="en")[0][1])
-        except:
-            subjlabel = str(subj)
-        try:
-            objlabel = str(uniongraph.preferredLabel(obj, lang="en")[0][1])
-        except:
-            objlabel = str(obj)
-
-        subjuri = get_prefix_uri(uniongraph, subj)
-        objuri = get_prefix_uri(uniongraph, obj)
-
-        # solution for splitting nodes from here: https://stackoverflow.com/questions/45548114/graphvizdot-language-can-i-get-nodes-in-horizontal-line#45553493
-        #subjlabel = '{{' + subjlabel + '|' + objlabel + '}}'
-
-        # solution for splitting nodes from here: https://stackoverflow.com/questions/36445870/graphviz-node-split
-        subjlabel = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\
-                <TR><TD PORT="instance" CELLPADDING="10" bgcolor="' + get_doccolour(objlabel, crmgraph) + '"><FONT FACE="Ubuntu">' + subjlabel + '</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">' + subjuri + '</FONT></TD></TR>\
-                <TR><TD PORT="class" CELLPADDING="10" bgcolor="' + get_doccolour(objlabel, crmgraph) + '"><FONT FACE="Ubuntu"><I>' + objlabel + '</I></FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">' + objuri + '</FONT></TD></TR>\
-                </TABLE>>'
-
-        nodes[subjgnode] = subjlabel
-        #nodes[objgnode] = objlabel
-
-    for node, label in nodes.items():
-        dot.node(node, label)
-
-        # do literals
-        #if obj is Literal:
-        #    nodes[objgnode] = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\
-        #        <TR><TD PORT="instance" CELLPADDING="10" bgcolor="#fff"><FONT FACE="Ubuntu">' + objlabel + '</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">Literal</FONT></TD></TR>\
-        #        </TABLE>>'
-
-    # then do edges
     for subj, pred, obj in graph:
-        # we have already dealt with rdf:type and rdfs:label and we do not want them plotted
-        if pred == RDF.type:
-            continue
+        #ignore the label triples as we do not want them as separate links, only as part of the labels
         if pred == RDFS.label:
             continue
         if pred == SKOS.prefLabel:
             continue
         # remove ":" from the node names as graphviz gives a special meaning to them see https://graphviz.readthedocs.io/en/stable/manual.html#ports
-        # we may as well remove "/"
+        # remove "/", ".", "-" as well as they are problematic
         subjgnode = str(subj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
         objgnode = str(obj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
         predgnode = str(pred).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
-
+        # create graphviz nodes with new uuids for literals to avoid literals appear as class nodes
+        if type(obj) is rdflib.Literal:
+            newuuid = str(uuid.uuid4()).replace("-", "")
+            objgnode = newuuid + str(obj)
         # always create a new instance of predgnode otherwise if the predicates are used multiple times we produce spider-like drawings
         predgnode = subjgnode + predgnode + objgnode
 
+        if pred == RDF.type:
+            try:
+                subjlabel = str(uniongraph.preferredLabel(subj, lang="en")[0][1])
+            except:
+                subjlabel = str(subj)
+            try:
+                objlabel = str(uniongraph.preferredLabel(obj, lang="en")[0][1])
+            except:
+                objlabel = str(obj)
+
+            subjuri = get_prefix_uri(uniongraph, subj)
+            objuri = get_prefix_uri(uniongraph, obj)
+
+            # solution for splitting nodes from here: https://stackoverflow.com/questions/45548114/graphvizdot-language-can-i-get-nodes-in-horizontal-line#45553493
+            # subjlabel = '{{' + subjlabel + '|' + objlabel + '}}'
+
+            # solution for splitting nodes from here: https://stackoverflow.com/questions/36445870/graphviz-node-split
+            subjlabel = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\
+                    <TR><TD PORT="instance" CELLPADDING="10" bgcolor="' + get_doccolour(objlabel, crmgraph) + '"><FONT FACE="Ubuntu">' + subjlabel + '</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">' + subjuri + '</FONT></TD></TR>\
+                    <TR><TD PORT="class" CELLPADDING="10" bgcolor="' + get_doccolour(objlabel, crmgraph) + '"><FONT FACE="Ubuntu"><I>' + objlabel + '</I></FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">' + objuri + '</FONT></TD></TR>\
+                    </TABLE>>'
+
+            #nodes[subjgnode] = subjlabel
+            dot.node(subjgnode, subjlabel)
+            continue
+
+        if type(obj) is rdflib.Literal:
+            objlabel = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\
+                        <TR><TD PORT="instance" CELLPADDING="10" bgcolor="white"><FONT FACE="Ubuntu">' + str(obj) + '</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">Literal</FONT></TD></TR>\
+                        </TABLE>>'
+
+            #nodes[objgnode] = objlabel
+            dot.node(objgnode, objlabel)
+
+        # then do edges
         try:
             predlabel = str(uniongraph.preferredLabel(pred, lang="en")[0][1])
         except:

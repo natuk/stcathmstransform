@@ -55,7 +55,7 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
     doci = 903 # select a row as an example for the documentation graph
 
     # 1_1_OpeningCharacteristics
-    cursor.execute("SELECT mss.msuuid, mss.cataloguename, bld.surveyeventuuid, oc.* FROM `1_1_OpeningCharacteristics` oc INNER JOIN MSs mss ON oc.msid=mss.id INNER JOIN `1_0_BoxingLeavesDate` bld ON bld.msid=mss.id ORDER BY oc.msid ASC")
+    cursor.execute("SELECT mss.msuuid, mss.cataloguename, bld.surveyeventuuid, oc.* FROM `1_1_OpeningCharacteristics` oc INNER JOIN MSs mss ON oc.msid=mss.id INNER JOIN `1_0_BoxingLeavesDate` bld ON bld.msid=mss.id WHERE oc.msid=903 ORDER BY oc.msid ASC")
     rows = cursor.fetchall()
 
     for i, row in enumerate(rows):

@@ -16,8 +16,8 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor(dictionary=True)
 cursorupdate = mydb.cursor(buffered=True)
 
-mss.mss(mydb, cursor, cursorupdate)
-boxingleavesdate.boxingleavesdate(mydb, cursor, cursorupdate)
-#openingcharacteristics.openingcharacteristics(mydb, cursor, cursorupdate, namespace, graph, CRM)
+#mss.mss(mydb, cursor, cursorupdate)
+#boxingleavesdate.boxingleavesdate(mydb, cursor, cursorupdate)
+openingcharacteristics.openingcharacteristics(mydb, cursor, cursorupdate)
 #pagemarkers.pagemarkers(mydb, cursor, cursorupdate, namespace, graph, CRM)
 

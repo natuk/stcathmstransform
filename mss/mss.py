@@ -16,7 +16,7 @@ def mss(mydb, cursor, cursorupdate):
     STCATH = get_namespace(graph, 'stcath')
     CRM = get_namespace(graph, 'crm')
 
-    # deal with thesaurus terms
+    # deal with thesaurus concepts
     graph.add((URIRef("http://w3id.org/lob/concept/4886"), RDF.type, CRM["E55_Type"])) # codex-form books
     graph.add((URIRef("http://w3id.org/lob/concept/4886"), SKOS.prefLabel, Literal("codex-form books", lang="en")))  # codex-form books
 

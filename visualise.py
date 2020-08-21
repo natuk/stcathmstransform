@@ -16,18 +16,23 @@ def visualise_graph(graph, comment):
 
     # start a new drawing
     dot = Digraph(comment=comment)
-    #dot.attr(rankdir='LR', ratio='0.5', splines='line')
-    dot.attr(rankdir='LR', splines='line')
+    #dot.attr(rankdir='LR', ratio='0.5', splines='curved')
+    dot.attr(rankdir='LR', pad='0.5', nodesep='1', ranksep='2.5', splines='line')
     dot.attr('node', shape='none', penwidth='3.0', margin='0') # using "none" shape here as the HTML labels are incompatible with anything else see: https://stackoverflow.com/questions/54610953/graphviz-node-with-html-label-has-no-ports and https://gitlab.com/graphviz/graphviz/-/issues/1491
 
     # prepare nodes first
     nodes = {}  # local dictionary holding nodes
-    # for every rdf:type triple in the graph
+    # for every rdf:type triple in the graph3
     for subj, pred, obj in graph.triples((None, RDF.type, None)):
         # remove ":" from the node names as graphviz gives a special meaning to them see https://graphviz.readthedocs.io/en/stable/manual.html#ports
         # remove "/", ".", "-" as well as they are problematic
-        subjgnode = str(subj).replace(":","").replace("/","").replace(".", "").replace("-", "")
+        subjgnode = str(subj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
         objgnode = str(obj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
+        predgnode = str(pred).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
+
+        # always create a new instance of predgnode and otherwise if the predicates is used multiple times we produce spider-like drawings
+        predgnode = subjgnode + predgnode + objgnode
+
         try:
             subjlabel = str(uniongraph.preferredLabel(subj, lang="en")[0][1])
         except:
@@ -55,6 +60,12 @@ def visualise_graph(graph, comment):
     for node, label in nodes.items():
         dot.node(node, label)
 
+        # do literals
+        #if obj is Literal:
+        #    nodes[objgnode] = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\
+        #        <TR><TD PORT="instance" CELLPADDING="10" bgcolor="#fff"><FONT FACE="Ubuntu">' + objlabel + '</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">Literal</FONT></TD></TR>\
+        #        </TABLE>>'
+
     # then do edges
     for subj, pred, obj in graph:
         # we have already dealt with rdf:type and rdfs:label and we do not want them plotted
@@ -69,6 +80,10 @@ def visualise_graph(graph, comment):
         subjgnode = str(subj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
         objgnode = str(obj).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
         predgnode = str(pred).replace(":", "").replace("/", "").replace(".", "").replace("-", "")
+
+        # always create a new instance of predgnode otherwise if the predicates are used multiple times we produce spider-like drawings
+        predgnode = subjgnode + predgnode + objgnode
+
         try:
             predlabel = str(uniongraph.preferredLabel(pred, lang="en")[0][1])
         except:
@@ -76,16 +91,17 @@ def visualise_graph(graph, comment):
 
         preduri = get_prefix_uri(uniongraph, pred)
 
-        predlabel = '<<FONT FACE="Ubuntu">' + predlabel + '</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">' + preduri + '</FONT>>'
+        predlabel = '<<TABLE BORDER="0" CELLBORDER="0"><TR><TD BGCOLOR = "white"><FONT FACE="Ubuntu">' + predlabel + '</FONT></TD></TR><TR><TD BGCOLOR = "white"><FONT FACE="FreeMono" POINT-SIZE="8">' + preduri + '</FONT></TD></TR></TABLE>>'
 
         # we are using invisible nodes for the predicates
         dot.node(predgnode, predlabel)
-
-        dot.edge(subjgnode + ":instance", predgnode, arrowhead='none') # instance links
-        dot.edge(predgnode, objgnode + ":instance")
+        dot.edge(subjgnode + ":instance:e", predgnode, arrowhead='none') # instance links
+        dot.edge(predgnode, objgnode + ":instance:w")
+        #dot.edge(subjgnode + ":instance:e", objgnode + ":instance:w", predlabel)
 
         #dot.edge(subjgnode, predgnode, arrowhead='none') # no instance links
         #dot.edge(predgnode, objgnode)
+        #dot.edge(subjgnode, objgnode, headlabel=predlabel, labeldistance='5', labelangle='45')
 
     return dot
 

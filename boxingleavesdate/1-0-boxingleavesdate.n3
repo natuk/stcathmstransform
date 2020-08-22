@@ -1,0 +1,60 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ns1: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix stcath: <https://data.ligatus.org.uk/stcatherines/ms/> .
+
+stcath:e7abee24-6ecf-4b5e-a060-cc7b904b8a2c a crm:E13_Attribute_Assignment ;
+    rdfs:label "Survey event for Arabica 0002"@en ;
+    crm:P4_has_time-span stcath:828b0a8a-c47d-4a77-9fde-9c27469bcc25 ;
+    crm:P9_consists_of stcath:9501fe50-064a-4cb5-a8e2-41fbab731491 .
+
+<http://stcath.measuringbox> a crm:E55_Type ;
+    ns1:prefLabel "measuring boxes"@en .
+
+<http://vocab.getty.edu/aat/300055644> a crm:E55_Type ;
+    ns1:prefLabel "height"@en .
+
+<http://vocab.getty.edu/aat/300055646> a crm:E55_Type ;
+    ns1:prefLabel "thickness"@en .
+
+<http://vocab.getty.edu/aat/300055647> a crm:E55_Type ;
+    ns1:prefLabel "width"@en .
+
+stcath:828b0a8a-c47d-4a77-9fde-9c27469bcc25 a crm:E52_Time-Span ;
+    rdfs:label "Time-span of survey event for Arabica 0002"@en ;
+    crm:P82a_begin_of_the_begin "2001-10-29T08:00:00" ;
+    crm:P82b_end_of_the_end "2001-10-29T20:00:00" .
+
+stcath:9501fe50-064a-4cb5-a8e2-41fbab731491 a crm:E16_Measurement ;
+    rdfs:label "Measurement of overall dimensions of Arabica 0002"@en ;
+    crm:P125_used_object_of_type <http://stcath.measuringbox> ;
+    crm:P39_measured stcath:e009097f-d4d5-44c3-9e01-45c13a56f1a1 ;
+    crm:P40_observed_dimension stcath:ab22c771-863e-4d49-8935-022012c03229,
+        stcath:ca794bde-8797-48bd-998e-0baf499ac630,
+        stcath:ce78b94e-9fbc-4244-93b4-2e4104a20452 .
+
+stcath:ab22c771-863e-4d49-8935-022012c03229 a crm:E54_Dimension ;
+    rdfs:label "Width of Arabica 0002"@en ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300055647> ;
+    crm:P90_has_value "179" ;
+    crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> .
+
+stcath:ca794bde-8797-48bd-998e-0baf499ac630 a crm:E54_Dimension ;
+    rdfs:label "Thickness of Arabica 0002"@en ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300055646> ;
+    crm:P90_has_value "76" ;
+    crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> .
+
+stcath:ce78b94e-9fbc-4244-93b4-2e4104a20452 a crm:E54_Dimension ;
+    rdfs:label "Height of Arabica 0002"@en ;
+    crm:P2_has_type <http://vocab.getty.edu/aat/300055644> ;
+    crm:P90_has_value "275" ;
+    crm:P91_has_unit <http://vocab.getty.edu/aat/300379097> .
+
+stcath:e009097f-d4d5-44c3-9e01-45c13a56f1a1 a crm:E22_Man-Made_Object ;
+    rdfs:label "Arabica 0002"@en ;
+    crm:P3_has_note "Yes" .
+
+<http://vocab.getty.edu/aat/300379097> a crm:E58_Measurement_Unit ;
+    ns1:prefLabel "millimeters"@en .
+

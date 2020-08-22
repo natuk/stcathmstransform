@@ -6,10 +6,12 @@ from visualise import visualise_graph
 
 def openingcharacteristics(mydb, cursor, cursorupdate):
     graph = Graph() # graph for the dataset
-    docgraph = Graph() # graph for the documentation drawing
+    docgraph1 = Graph() # graph for the documentation drawing
+    docgraph2 = Graph()  # graph for the documentation drawing
     # add namespaces
     graph = apply_namespaces(graph)
-    docgraph = apply_namespaces(docgraph)
+    docgraph1 = apply_namespaces(docgraph1)
+    docgraph2 = apply_namespaces(docgraph2)
     # get the ones we need here
     STCATH = get_namespace(graph, 'stcath')
     CRM = get_namespace(graph, 'crm')
@@ -52,10 +54,11 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
     graph.add((URIRef("http://stcath.structurebreakdown"), RDF.type, SKOS.Concept))
     graph.add((URIRef("http://stcath.structurebreakdown"), SKOS.prefLabel, Literal('structure breakdown (condition)', lang="en")))
 
-    doci = 903 # select a row as an example for the documentation graph
+    doci1 = 903 # select a row as an example for the documentation graph
+    doci2 = 866
 
     # 1_1_OpeningCharacteristics
-    cursor.execute("SELECT mss.msuuid, mss.cataloguename, bld.surveyeventuuid, oc.* FROM `1_1_OpeningCharacteristics` oc INNER JOIN MSs mss ON oc.msid=mss.id INNER JOIN `1_0_BoxingLeavesDate` bld ON bld.msid=mss.id ORDER BY oc.msid ASC")
+    cursor.execute("SELECT mss.msuuid, mss.cataloguename, bld.surveyeventuuid, oc.* FROM `1_1_OpeningCharacteristics` oc INNER JOIN MSs mss ON oc.msid=mss.id INNER JOIN `1_0_BoxingLeavesDate` bld ON bld.msid=mss.id WHERE oc.msid=903 OR oc.msid=866 ORDER BY oc.msid ASC")
     rows = cursor.fetchall()
 
     for i, row in enumerate(rows):
@@ -236,7 +239,7 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                 graph.add((textblockbreaksdimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.nooftextblockbreaks")))  # dimension has type right board
                 graph.add((textblockbreaksdimensionuuid, CRM["P90_has_value"], Literal(str(row["textblockbreaks"]))))  # dimension has value from the db
                 graph.add((textblockbreaksdimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.textblockbreaks")))  # dimension has unit textblockbreaks
-            else: #TODO, make it a condition of structure breakdown
+            else:
                 if row["textblockbreaksmeasurementuuid"] is None:
                     newuuid = str(uuid.uuid4())
                     textblockbreaksconditionassessmentuuid = URIRef(newuuid, 'stcath')
@@ -261,103 +264,191 @@ def openingcharacteristics(mydb, cursor, cursorupdate):
                     mydb.commit()
                 else:
                     textblockbreaksconditionuuid = URIRef(row["textblockbreaksdimensionuuid"], 'stcath')
-                graph.add((textblockbreaksconditionuuid, RDF.type, CRM["E3_Condition"]))  # rdf type the condition
+                graph.add((textblockbreaksconditionuuid, RDF.type, CRM["E3_Condition_State"]))  # rdf type the condition
                 graph.add((textblockbreaksconditionuuid, RDFS.label, Literal('Textblock breaks (condition) of ' + shelfmark, lang="en")))
                 graph.add((textblockbreaksconditionassessmentuuid, CRM["P35_has_identified"], textblockbreaksconditionuuid))
                 graph.add((textblockbreaksconditionuuid, CRM["P2_has_type"], URIRef("http://stcath.structurebreakdown")))  # condition has type
 
-        if row["msid"] == doci: # create the documentation graph
-            docgraph.add((URIRef("http://vocab.getty.edu/aat/300022525"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://vocab.getty.edu/aat/300022525"), SKOS.prefLabel, Literal("protractors", lang="en")))
-            docgraph.add((URIRef("http://stcath.leftofcentre"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.leftofcentre"), SKOS.prefLabel, Literal("left of centre (textblock measurement)", lang="en")))
-            docgraph.add((URIRef("http://stcath.centre"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.centre"), SKOS.prefLabel, Literal("centre (textblock measurement)", lang="en")))
-            docgraph.add((URIRef("http://stcath.rightofcentre"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.rightofcentre"), SKOS.prefLabel, Literal("right of centre (textblock measurement)", lang="en")))
-            docgraph.add((URIRef("http://stcath.rightboardopeningangle"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.rightboardopeningangle"), SKOS.prefLabel, Literal("right board opening angle", lang="en")))
-            docgraph.add((URIRef("http://stcath.leftboardopeningangle"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.leftboardopeningangle"), SKOS.prefLabel, Literal("left board opening angle", lang="en")))
-            docgraph.add((URIRef("http://stcath.degrees"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.degrees"), SKOS.prefLabel, Literal("degrees (angle measuring units)", lang="en")))
-            docgraph.add((URIRef("http://vocab.getty.edu/aat/300266529"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://vocab.getty.edu/aat/300266529"), SKOS.prefLabel, Literal('rulers', lang="en")))
-            docgraph.add((URIRef("http://vocab.getty.edu/aat/300379097"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://vocab.getty.edu/aat/300379097"), SKOS.prefLabel, Literal('millimeters', lang="en")))
-            docgraph.add((URIRef("http://stcath.closedbook"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.closedbook"), SKOS.prefLabel, Literal('closed book thickness', lang="en")))
-            docgraph.add((URIRef("http://stcath.textblockbreaks"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.textblockbreaks"), SKOS.prefLabel, Literal('textblock breaks', lang="en")))
-            docgraph.add((URIRef("http://stcath.nooftextblockbreaks"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.nooftextblockbreaks"), SKOS.prefLabel, Literal('number of textblock breaks', lang="en")))
-            docgraph.add((URIRef("http://stcath.structurebreakdown"), RDF.type, CRM["E55_Type"]))
-            docgraph.add((URIRef("http://stcath.structurebreakdown"), SKOS.prefLabel, Literal('structure breakdown (condition)', lang="en")))
-            docgraph.add((msuuid, RDF.type, CRM["E22_Man-Made_Object"]))
-            docgraph.add((msuuid, RDFS.label, Literal(shelfmark)))
-            docgraph.add((URIRef(row["surveyeventuuid"], 'stcath'), RDF.type, CRM["E13_Attribute_Assignment"]))  # rdf type the survey event
-            docgraph.add((URIRef(row["surveyeventuuid"], 'stcath'), RDFS.label, Literal('Survey event for ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, RDF.type, CRM["E16_Measurement"]))  # rdf type the measurement
-            docgraph.add((measurementuuid, RDFS.label, Literal('Measurement of textblock opening angles of ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, CRM["P39_measured"], msuuid)) # measurement event measured the manuscript TODO: point this to the textblock, not the MS
-            docgraph.add((measurementuuid, CRM["P125_used_object_of_type"], URIRef("http://vocab.getty.edu/aat/300022525")))  # measurement used measuring box
-            docgraph.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], measurementuuid))  # measurement event is part of survey event
-            docgraph.add((leftofcentredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
-            docgraph.add((leftofcentredimensionuuid, RDFS.label, Literal('Left of centre of ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, CRM["P40_observed_dimension"], leftofcentredimensionuuid))  # measurement observes the dimension
-            docgraph.add((leftofcentredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.leftofcentre")))  # dimension has type left of centre
-            docgraph.add((leftofcentredimensionuuid, CRM["P90_has_value"], Literal(str(row["leftofcentre"]))))  # dimension has value from the db
-            docgraph.add((leftofcentredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
-            docgraph.add((centredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
-            docgraph.add((centredimensionuuid, RDFS.label, Literal('Centre of ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, CRM["P40_observed_dimension"], centredimensionuuid))  # measurement observes the dimension
-            docgraph.add((centredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.centre")))  # dimension has type left of centre
-            docgraph.add((centredimensionuuid, CRM["P90_has_value"], Literal(str(row["centre"]))))  # dimension has value from the db
-            docgraph.add((centredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
-            docgraph.add((rightofcentredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
-            docgraph.add((rightofcentredimensionuuid, RDFS.label, Literal('Right of centre of ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, CRM["P40_observed_dimension"], rightofcentredimensionuuid))  # measurement observes the dimension
-            docgraph.add((rightofcentredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.rightofcentre")))  # dimension has type right of centre
-            docgraph.add((rightofcentredimensionuuid, CRM["P90_has_value"], Literal(str(row["rightofcentre"]))))  # dimension has value from the db
-            docgraph.add((rightofcentredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
-            docgraph.add((rightboarddimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
-            docgraph.add((rightboarddimensionuuid, RDFS.label, Literal('Right board opening angle of ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, CRM["P40_observed_dimension"], rightboarddimensionuuid))  # measurement observes the dimension
-            docgraph.add((rightboarddimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.rightboardopeningangle")))  # dimension has type right board
-            docgraph.add((rightboarddimensionuuid, CRM["P90_has_value"], Literal(str(row["rightboard"]))))  # dimension has value from the db
-            docgraph.add((rightboarddimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
-            docgraph.add((leftboarddimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
-            docgraph.add((leftboarddimensionuuid, RDFS.label, Literal('Right board opening angle of ' + shelfmark, lang="en")))
-            docgraph.add((measurementuuid, CRM["P40_observed_dimension"], leftboarddimensionuuid))  # measurement observes the dimension
-            docgraph.add((leftboarddimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.leftboardopeningangle")))  # dimension has type left board
-            docgraph.add((leftboarddimensionuuid, CRM["P90_has_value"], Literal(str(row["leftboard"]))))  # dimension has value from the db
-            docgraph.add((leftboarddimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
-            docgraph.add((closedbookmeasurementuuid, RDF.type, CRM["E16_Measurement"]))  # type the min thickness measurement event
-            docgraph.add((closedbookmeasurementuuid, RDFS.label, Literal('Measurement of minimum thickness of ' + shelfmark, lang="en")))  # label the measurement
-            docgraph.add((closedbookmeasurementuuid, CRM["P39_measured"], msuuid))  # measurement event measured the manuscript
-            docgraph.add((closedbookmeasurementuuid, CRM["P125_used_object_of_type"], URIRef("http://vocab.getty.edu/aat/300266529")))  # measurement used ruler
-            docgraph.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], closedbookmeasurementuuid))  # measurement event is part of survey event
-            docgraph.add((closedbookdimensionuuid, RDF.type, CRM["E54_Dimension"]))  # type the dimension
-            docgraph.add((closedbookdimensionuuid, RDFS.label, Literal('Minimum thickness of ' + shelfmark, lang="en")))  # label of minimum thickness dimension
-            docgraph.add((closedbookmeasurementuuid, CRM["P40_observed_dimension"], closedbookdimensionuuid))  # measurement observes the dimension
-            docgraph.add((closedbookdimensionuuid, CRM["P90_has_value"], Literal(str(row["closedbook"]))))
-            docgraph.add((closedbookdimensionuuid, CRM["P91_has_unit"], URIRef("http://vocab.getty.edu/aat/300379097")))
-            docgraph.add((closedbookdimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.closedbook")))
-            docgraph.add((textblockbreaksmeasurementuuid, RDF.type, CRM["E16_Measurement"]))  # rdf type the measurement
-            docgraph.add((textblockbreaksmeasurementuuid, RDFS.label, Literal('Counting of textblock breaks of ' + shelfmark, lang="en")))
-            docgraph.add((textblockbreaksmeasurementuuid, CRM["P39_measured"], msuuid))  # measurement event measured the manuscript TODO: point this to the textblock, not the MS
-            docgraph.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], textblockbreaksmeasurementuuid))  # measurement event is part of survey event
-            docgraph.add((textblockbreaksdimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
-            docgraph.add((textblockbreaksdimensionuuid, RDFS.label, Literal('Number of textblock breaks of ' + shelfmark, lang="en")))
-            docgraph.add((textblockbreaksmeasurementuuid, CRM["P40_observed_dimension"], textblockbreaksdimensionuuid))
-            docgraph.add((textblockbreaksdimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.nooftextblockbreaks")))  # dimension has type right board
-            docgraph.add((textblockbreaksdimensionuuid, CRM["P90_has_value"], Literal(str(row["textblockbreaks"]))))  # dimension has value from the db
-            docgraph.add((textblockbreaksdimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.textblockbreaks")))  # dimension has unit textblockbreaks
+        if row["msid"] == doci1: # create the documentation graph for few textblock breaks and a intact boards
+            docgraph1.add((URIRef("http://vocab.getty.edu/aat/300022525"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://vocab.getty.edu/aat/300022525"), SKOS.prefLabel, Literal("protractors", lang="en")))
+            docgraph1.add((URIRef("http://stcath.leftofcentre"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.leftofcentre"), SKOS.prefLabel, Literal("left of centre (textblock measurement)", lang="en")))
+            docgraph1.add((URIRef("http://stcath.centre"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.centre"), SKOS.prefLabel, Literal("centre (textblock measurement)", lang="en")))
+            docgraph1.add((URIRef("http://stcath.rightofcentre"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.rightofcentre"), SKOS.prefLabel, Literal("right of centre (textblock measurement)", lang="en")))
+            docgraph1.add((URIRef("http://stcath.rightboardopeningangle"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.rightboardopeningangle"), SKOS.prefLabel, Literal("right board opening angle", lang="en")))
+            docgraph1.add((URIRef("http://stcath.leftboardopeningangle"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.leftboardopeningangle"), SKOS.prefLabel, Literal("left board opening angle", lang="en")))
+            docgraph1.add((URIRef("http://stcath.degrees"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.degrees"), SKOS.prefLabel, Literal("degrees (angle measuring units)", lang="en")))
+            docgraph1.add((URIRef("http://vocab.getty.edu/aat/300266529"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://vocab.getty.edu/aat/300266529"), SKOS.prefLabel, Literal('rulers', lang="en")))
+            docgraph1.add((URIRef("http://vocab.getty.edu/aat/300379097"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://vocab.getty.edu/aat/300379097"), SKOS.prefLabel, Literal('millimeters', lang="en")))
+            docgraph1.add((URIRef("http://stcath.closedbook"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.closedbook"), SKOS.prefLabel, Literal('closed book thickness', lang="en")))
+            docgraph1.add((URIRef("http://stcath.textblockbreaks"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.textblockbreaks"), SKOS.prefLabel, Literal('textblock breaks', lang="en")))
+            docgraph1.add((URIRef("http://stcath.nooftextblockbreaks"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.nooftextblockbreaks"), SKOS.prefLabel, Literal('number of textblock breaks', lang="en")))
+            docgraph1.add((URIRef("http://stcath.structurebreakdown"), RDF.type, CRM["E55_Type"]))
+            docgraph1.add((URIRef("http://stcath.structurebreakdown"), SKOS.prefLabel, Literal('structure breakdown (condition)', lang="en")))
+            docgraph1.add((msuuid, RDF.type, CRM["E22_Man-Made_Object"]))
+            docgraph1.add((msuuid, RDFS.label, Literal(shelfmark, lang="en")))
+            docgraph1.add((URIRef(row["surveyeventuuid"], 'stcath'), RDF.type, CRM["E13_Attribute_Assignment"]))  # rdf type the survey event
+            docgraph1.add((URIRef(row["surveyeventuuid"], 'stcath'), RDFS.label, Literal('Survey event for ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, RDF.type, CRM["E16_Measurement"]))  # rdf type the measurement
+            docgraph1.add((measurementuuid, RDFS.label, Literal('Measurement of textblock opening angles of ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, CRM["P39_measured"], msuuid)) # measurement event measured the manuscript TODO: point this to the textblock, not the MS
+            docgraph1.add((measurementuuid, CRM["P125_used_object_of_type"], URIRef("http://vocab.getty.edu/aat/300022525")))  # measurement used measuring box
+            docgraph1.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], measurementuuid))  # measurement event is part of survey event
+            docgraph1.add((leftofcentredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph1.add((leftofcentredimensionuuid, RDFS.label, Literal('Left of centre of ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, CRM["P40_observed_dimension"], leftofcentredimensionuuid))  # measurement observes the dimension
+            docgraph1.add((leftofcentredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.leftofcentre")))  # dimension has type left of centre
+            docgraph1.add((leftofcentredimensionuuid, CRM["P90_has_value"], Literal(str(row["leftofcentre"]))))  # dimension has value from the db
+            docgraph1.add((leftofcentredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph1.add((centredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph1.add((centredimensionuuid, RDFS.label, Literal('Centre of ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, CRM["P40_observed_dimension"], centredimensionuuid))  # measurement observes the dimension
+            docgraph1.add((centredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.centre")))  # dimension has type left of centre
+            docgraph1.add((centredimensionuuid, CRM["P90_has_value"], Literal(str(row["centre"]))))  # dimension has value from the db
+            docgraph1.add((centredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph1.add((rightofcentredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph1.add((rightofcentredimensionuuid, RDFS.label, Literal('Right of centre of ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, CRM["P40_observed_dimension"], rightofcentredimensionuuid))  # measurement observes the dimension
+            docgraph1.add((rightofcentredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.rightofcentre")))  # dimension has type right of centre
+            docgraph1.add((rightofcentredimensionuuid, CRM["P90_has_value"], Literal(str(row["rightofcentre"]))))  # dimension has value from the db
+            docgraph1.add((rightofcentredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph1.add((rightboarddimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph1.add((rightboarddimensionuuid, RDFS.label, Literal('Right board opening angle of ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, CRM["P40_observed_dimension"], rightboarddimensionuuid))  # measurement observes the dimension
+            docgraph1.add((rightboarddimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.rightboardopeningangle")))  # dimension has type right board
+            docgraph1.add((rightboarddimensionuuid, CRM["P90_has_value"], Literal(str(row["rightboard"]))))  # dimension has value from the db
+            docgraph1.add((rightboarddimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph1.add((leftboarddimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph1.add((leftboarddimensionuuid, RDFS.label, Literal('Right board opening angle of ' + shelfmark, lang="en")))
+            docgraph1.add((measurementuuid, CRM["P40_observed_dimension"], leftboarddimensionuuid))  # measurement observes the dimension
+            docgraph1.add((leftboarddimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.leftboardopeningangle")))  # dimension has type left board
+            docgraph1.add((leftboarddimensionuuid, CRM["P90_has_value"], Literal(str(row["leftboard"]))))  # dimension has value from the db
+            docgraph1.add((leftboarddimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph1.add((closedbookmeasurementuuid, RDF.type, CRM["E16_Measurement"]))  # type the min thickness measurement event
+            docgraph1.add((closedbookmeasurementuuid, RDFS.label, Literal('Measurement of minimum thickness of ' + shelfmark, lang="en")))  # label the measurement
+            docgraph1.add((closedbookmeasurementuuid, CRM["P39_measured"], msuuid))  # measurement event measured the manuscript
+            docgraph1.add((closedbookmeasurementuuid, CRM["P125_used_object_of_type"], URIRef("http://vocab.getty.edu/aat/300266529")))  # measurement used ruler
+            docgraph1.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], closedbookmeasurementuuid))  # measurement event is part of survey event
+            docgraph1.add((closedbookdimensionuuid, RDF.type, CRM["E54_Dimension"]))  # type the dimension
+            docgraph1.add((closedbookdimensionuuid, RDFS.label, Literal('Minimum thickness of ' + shelfmark, lang="en")))  # label of minimum thickness dimension
+            docgraph1.add((closedbookmeasurementuuid, CRM["P40_observed_dimension"], closedbookdimensionuuid))  # measurement observes the dimension
+            docgraph1.add((closedbookdimensionuuid, CRM["P90_has_value"], Literal(str(row["closedbook"]))))
+            docgraph1.add((closedbookdimensionuuid, CRM["P91_has_unit"], URIRef("http://vocab.getty.edu/aat/300379097")))
+            docgraph1.add((closedbookdimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.closedbook")))
+            docgraph1.add((textblockbreaksmeasurementuuid, RDF.type, CRM["E16_Measurement"]))  # rdf type the measurement
+            docgraph1.add((textblockbreaksmeasurementuuid, RDFS.label, Literal('Counting of textblock breaks of ' + shelfmark, lang="en")))
+            docgraph1.add((textblockbreaksmeasurementuuid, CRM["P39_measured"], msuuid))  # measurement event measured the manuscript TODO: point this to the textblock, not the MS
+            docgraph1.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], textblockbreaksmeasurementuuid))  # measurement event is part of survey event
+            docgraph1.add((textblockbreaksdimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph1.add((textblockbreaksdimensionuuid, RDFS.label, Literal('Number of textblock breaks of ' + shelfmark, lang="en")))
+            docgraph1.add((textblockbreaksmeasurementuuid, CRM["P40_observed_dimension"], textblockbreaksdimensionuuid))
+            docgraph1.add((textblockbreaksdimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.nooftextblockbreaks")))  # dimension has type right board
+            docgraph1.add((textblockbreaksdimensionuuid, CRM["P90_has_value"], Literal(str(row["textblockbreaks"]))))  # dimension has value from the db
+            docgraph1.add((textblockbreaksdimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.textblockbreaks")))  # dimension has unit textblockbreaks
+
+        if row["msid"] == doci2:  # create the documentation graph for few textblock breaks and a intact boards
+            docgraph2.add((URIRef("http://vocab.getty.edu/aat/300022525"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://vocab.getty.edu/aat/300022525"), SKOS.prefLabel, Literal("protractors", lang="en")))
+            docgraph2.add((URIRef("http://stcath.leftofcentre"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.leftofcentre"), SKOS.prefLabel, Literal("left of centre (textblock measurement)", lang="en")))
+            docgraph2.add((URIRef("http://stcath.centre"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.centre"), SKOS.prefLabel, Literal("centre (textblock measurement)", lang="en")))
+            docgraph2.add((URIRef("http://stcath.rightofcentre"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.rightofcentre"), SKOS.prefLabel, Literal("right of centre (textblock measurement)", lang="en")))
+            docgraph2.add((URIRef("http://stcath.rightboardopeningangle"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.rightboardopeningangle"), SKOS.prefLabel, Literal("right board opening angle", lang="en")))
+            docgraph2.add((URIRef("http://stcath.leftboardopeningangle"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.leftboardopeningangle"), SKOS.prefLabel, Literal("left board opening angle", lang="en")))
+            docgraph2.add((URIRef("http://stcath.degrees"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.degrees"), SKOS.prefLabel, Literal("degrees (angle measuring units)", lang="en")))
+            docgraph2.add((URIRef("http://vocab.getty.edu/aat/300266529"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://vocab.getty.edu/aat/300266529"), SKOS.prefLabel, Literal('rulers', lang="en")))
+            docgraph2.add((URIRef("http://vocab.getty.edu/aat/300379097"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://vocab.getty.edu/aat/300379097"), SKOS.prefLabel, Literal('millimeters', lang="en")))
+            docgraph2.add((URIRef("http://stcath.closedbook"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.closedbook"), SKOS.prefLabel, Literal('closed book thickness', lang="en")))
+            docgraph2.add((URIRef("http://stcath.textblockbreaks"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.textblockbreaks"), SKOS.prefLabel, Literal('textblock breaks', lang="en")))
+            docgraph2.add((URIRef("http://stcath.nooftextblockbreaks"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.nooftextblockbreaks"), SKOS.prefLabel, Literal('number of textblock breaks', lang="en")))
+            docgraph2.add((URIRef("http://stcath.structurebreakdown"), RDF.type, CRM["E55_Type"]))
+            docgraph2.add((URIRef("http://stcath.structurebreakdown"), SKOS.prefLabel, Literal('structure breakdown (condition)', lang="en")))
+            docgraph2.add((msuuid, RDF.type, CRM["E22_Man-Made_Object"]))
+            docgraph2.add((msuuid, RDFS.label, Literal(shelfmark, lang="en")))
+            docgraph2.add((URIRef(row["surveyeventuuid"], 'stcath'), RDF.type, CRM["E13_Attribute_Assignment"]))  # rdf type the survey event
+            docgraph2.add((URIRef(row["surveyeventuuid"], 'stcath'), RDFS.label, Literal('Survey event for ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, RDF.type, CRM["E16_Measurement"]))  # rdf type the measurement
+            docgraph2.add((measurementuuid, RDFS.label, Literal('Measurement of textblock opening angles of ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, CRM["P39_measured"], msuuid))  # measurement event measured the manuscript TODO: point this to the textblock, not the MS
+            docgraph2.add((measurementuuid, CRM["P125_used_object_of_type"], URIRef("http://vocab.getty.edu/aat/300022525")))  # measurement used measuring box
+            docgraph2.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], measurementuuid))  # measurement event is part of survey event
+            docgraph2.add((leftofcentredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph2.add((leftofcentredimensionuuid, RDFS.label, Literal('Left of centre of ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, CRM["P40_observed_dimension"], leftofcentredimensionuuid))  # measurement observes the dimension
+            docgraph2.add((leftofcentredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.leftofcentre")))  # dimension has type left of centre
+            docgraph2.add((leftofcentredimensionuuid, CRM["P90_has_value"], Literal(str(row["leftofcentre"]))))  # dimension has value from the db
+            docgraph2.add((leftofcentredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph2.add((centredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph2.add((centredimensionuuid, RDFS.label, Literal('Centre of ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, CRM["P40_observed_dimension"], centredimensionuuid))  # measurement observes the dimension
+            docgraph2.add((centredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.centre")))  # dimension has type left of centre
+            docgraph2.add((centredimensionuuid, CRM["P90_has_value"], Literal(str(row["centre"]))))  # dimension has value from the db
+            docgraph2.add((centredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph2.add((rightofcentredimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph2.add((rightofcentredimensionuuid, RDFS.label, Literal('Right of centre of ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, CRM["P40_observed_dimension"], rightofcentredimensionuuid))  # measurement observes the dimension
+            docgraph2.add((rightofcentredimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.rightofcentre")))  # dimension has type right of centre
+            docgraph2.add((rightofcentredimensionuuid, CRM["P90_has_value"], Literal(str(row["rightofcentre"]))))  # dimension has value from the db
+            docgraph2.add((rightofcentredimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph2.add((rightboarddimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph2.add((rightboarddimensionuuid, RDFS.label, Literal('Right board opening angle of ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, CRM["P40_observed_dimension"], rightboarddimensionuuid))  # measurement observes the dimension
+            docgraph2.add((rightboarddimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.rightboardopeningangle")))  # dimension has type right board
+            docgraph2.add((rightboarddimensionuuid, CRM["P90_has_value"], Literal(str(row["rightboard"]))))  # dimension has value from the db
+            docgraph2.add((rightboarddimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph2.add((leftboarddimensionuuid, RDF.type, CRM["E54_Dimension"]))  # rdf type the dimension
+            docgraph2.add((leftboarddimensionuuid, RDFS.label, Literal('Right board opening angle of ' + shelfmark, lang="en")))
+            docgraph2.add((measurementuuid, CRM["P40_observed_dimension"], leftboarddimensionuuid))  # measurement observes the dimension
+            docgraph2.add((leftboarddimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.leftboardopeningangle")))  # dimension has type left board
+            docgraph2.add((leftboarddimensionuuid, CRM["P90_has_value"], Literal(str(row["leftboard"]))))  # dimension has value from the db
+            docgraph2.add((leftboarddimensionuuid, CRM["P91_has_unit"], URIRef("http://stcath.degrees")))  # dimension has unit degrees
+            docgraph2.add((closedbookmeasurementuuid, RDF.type, CRM["E16_Measurement"]))  # type the min thickness measurement event
+            docgraph2.add((closedbookmeasurementuuid, RDFS.label, Literal('Measurement of minimum thickness of ' + shelfmark, lang="en")))  # label the measurement
+            docgraph2.add((closedbookmeasurementuuid, CRM["P39_measured"], msuuid))  # measurement event measured the manuscript
+            docgraph2.add((closedbookmeasurementuuid, CRM["P125_used_object_of_type"], URIRef("http://vocab.getty.edu/aat/300266529")))  # measurement used ruler
+            docgraph2.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], closedbookmeasurementuuid))  # measurement event is part of survey event
+            docgraph2.add((closedbookdimensionuuid, RDF.type, CRM["E54_Dimension"]))  # type the dimension
+            docgraph2.add((closedbookdimensionuuid, RDFS.label, Literal('Minimum thickness of ' + shelfmark, lang="en")))  # label of minimum thickness dimension
+            docgraph2.add((closedbookmeasurementuuid, CRM["P40_observed_dimension"], closedbookdimensionuuid))  # measurement observes the dimension
+            docgraph2.add((closedbookdimensionuuid, CRM["P90_has_value"], Literal(str(row["closedbook"]))))
+            docgraph2.add((closedbookdimensionuuid, CRM["P91_has_unit"], URIRef("http://vocab.getty.edu/aat/300379097")))
+            docgraph2.add((closedbookdimensionuuid, CRM["P2_has_type"], URIRef("http://stcath.closedbook")))
+            docgraph2.add((textblockbreaksconditionassessmentuuid, RDF.type, CRM["E14_Condition_Assessment"]))  # rdf type the condition assessmnt
+            docgraph2.add((textblockbreaksconditionassessmentuuid, RDFS.label, Literal('Assessment of textblock breaks of ' + shelfmark, lang="en")))
+            docgraph2.add((textblockbreaksconditionassessmentuuid, CRM["P34_concerned"], msuuid))  # measurement event measured the manuscript TODO: point this to the textblock, not the MS
+            docgraph2.add((URIRef(row["surveyeventuuid"], 'stcath'), CRM["P9_consists_of"], textblockbreaksconditionassessmentuuid))  # measurement event is part of survey event
+            docgraph2.add((textblockbreaksconditionuuid, RDF.type, CRM["E3_Condition_State"]))  # rdf type the condition
+            docgraph2.add((textblockbreaksconditionuuid, RDFS.label, Literal('Textblock breaks (condition) of ' + shelfmark, lang="en")))
+            docgraph2.add((textblockbreaksconditionassessmentuuid, CRM["P35_has_identified"], textblockbreaksconditionuuid))
+            docgraph2.add((textblockbreaksconditionuuid, CRM["P2_has_type"], URIRef("http://stcath.structurebreakdown")))  # condition has type
 
     # documentation drawing
-    dot = visualise_graph(docgraph, 'Opening characteristics')
-    dot.render('openingcharacteristics/1-1-openingcharacteristics.gv', format='svg')
+    dot1 = visualise_graph(docgraph1, 'Opening characteristics - textblock breaks counted')
+    dot1.render('openingcharacteristics/1-1-openingcharacteristics-1.gv', format='svg')
+    dot2 = visualise_graph(docgraph2, 'Opening characteristics - textblock breaks as condition')
+    dot2.render('openingcharacteristics/1-1-openingcharacteristics-2.gv', format='svg')
 
     # serialise the graph
-    graph.serialize(destination='openingcharacteristics/1-1-openingcharacteristics.ttl', format='turtle', encoding="utf-8")
-    docgraph.serialize(destination='openingcharacteristics/1-1-openingcharacteristics.n3', format='n3', encoding="utf-8")
+    #graph.serialize(destination='openingcharacteristics/1-1-openingcharacteristics.ttl', format='turtle', encoding="utf-8")
+    #docgraph1.serialize(destination='openingcharacteristics/1-1-openingcharacteristics-1.n3', format='n3', encoding="utf-8")

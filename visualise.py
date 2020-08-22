@@ -18,7 +18,7 @@ def visualise_graph(graph, comment):
     # start a new drawing
     dot = Digraph(comment=comment)
     #dot.attr(rankdir='LR', ratio='0.5', splines='curved')
-    dot.attr(rankdir='LR', pad='0.5', nodesep='1', ranksep='2.5', splines='line')
+    dot.attr(rankdir='LR', pad='0.5', nodesep='0.5', ranksep='1', splines='line') # splines='curved' splines='line'
     dot.attr('node', shape='none', penwidth='3.0', margin='0') # using "none" shape here as the HTML labels are incompatible with anything else see: https://stackoverflow.com/questions/54610953/graphviz-node-with-html-label-has-no-ports and https://gitlab.com/graphviz/graphviz/-/issues/1491
 
     # prepare nodes first

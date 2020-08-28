@@ -1,0 +1,53 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ns1: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix stcath: <https://data.ligatus.org.uk/stcatherines/ms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+stcath:bc676a40-931c-431e-8491-926838964df6 a crm:E79_Part_Addition ;
+    rdfs:label "Addition of pagemarkers to Arabica 0589"@en ;
+    crm:P110_augmented stcath:8dc2dd19-54a0-4907-858e-924e32e5fb1d ;
+    crm:P111_added stcath:f1abe675-fc56-4e0d-95f4-fd6dc47bc3a7 ;
+    crm:P32_used_general_technique <http://stcath.looped> .
+
+<http://stcath.dangling> a crm:E55_Type ;
+    rdfs:label "dangling"@en .
+
+<http://stcath.looped> a crm:E55_Type ;
+    rdfs:label "looped"@en .
+
+<http://vocab.getty.edu/aat/300056130> a crm:E55_Type ;
+    rdfs:label "color (perceived attribute)"@en .
+
+<http://w3id.org/lob/concept/2474> a crm:E57_Material ;
+    rdfs:label "thread"@en .
+
+stcath:5b9532ba-730d-45dd-9f6f-2127545de752 a crm:E22_Man-Made_Object ;
+    rdfs:label "Subset of 'Page-markers of Arabica 0589' on Foredge"@en ;
+    crm:P57_has_number_of_parts 2 .
+
+stcath:75d0d969-d7b5-416e-9289-598d65c7a5fc a crm:E3_Condition_State ;
+    rdfs:label "Condition of subset of Page-markers of Arabica 0589"@en ;
+    crm:P2_has_type <http://stcath.dangling> .
+
+stcath:8dc2dd19-54a0-4907-858e-924e32e5fb1d a crm:E22_Man-Made_Object ;
+    rdfs:label "Arabica 0589"@en ;
+    crm:P46_is_composed_of stcath:f1abe675-fc56-4e0d-95f4-fd6dc47bc3a7 ;
+    crm:TP46_is_composed_of_physical_thing_of_type <http://w3id.org/lob/concept/2944> .
+
+stcath:9b59ed56-b0f6-44f1-a3c4-ca0bcba3bb43 a crm:E22_Man-Made_Object ;
+    rdfs:label "Subset of 'Page-markers of Arabica 0589' with condition Dangling"@en ;
+    crm:P44_has_condition stcath:75d0d969-d7b5-416e-9289-598d65c7a5fc ;
+    crm:P57_has_number_of_parts 2 .
+
+<http://w3id.org/lob/concept/2944> a crm:E55_Type ;
+    ns1:prefLabel "leaf string markers"@en .
+
+stcath:f1abe675-fc56-4e0d-95f4-fd6dc47bc3a7 a crm:E22_Man-Made_Object ;
+    rdfs:label "Page-markers of Arabica 0589"@en ;
+    crm:NTP56_does_not_bear_feature_of_type <http://vocab.getty.edu/aat/300056130> ;
+    crm:P2_has_type <http://w3id.org/lob/concept/2944> ;
+    crm:P45_consists_of <http://w3id.org/lob/concept/2474> ;
+    crm:P46_is_composed_of stcath:5b9532ba-730d-45dd-9f6f-2127545de752,
+        stcath:9b59ed56-b0f6-44f1-a3c4-ca0bcba3bb43 .
+

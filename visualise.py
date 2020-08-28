@@ -12,8 +12,12 @@ def visualise_graph(graph, comment):
     crmgraph = Graph()
     crmgraph.parse("cidoc-crm-6.2.1.rdfs")
 
-    #merge the two graphs
-    uniongraph = graph + crmgraph
+    # load the typed properties
+    crmtpgraph = Graph()
+    crmtpgraph.parse("CRM-typed-properties.owl")
+
+    #merge the three graphs
+    uniongraph = graph + crmgraph + crmtpgraph
 
     # start a new drawing
     dot = Digraph(comment=comment)

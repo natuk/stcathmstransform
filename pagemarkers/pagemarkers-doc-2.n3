@@ -1,0 +1,53 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ns1: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix stcath: <https://data.ligatus.org.uk/stcatherines/ms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+stcath:c09f98b8-c573-4ca5-8b0b-e51f1fa8df2c a crm:E79_Part_Addition ;
+    rdfs:label "Addition of pagemarkers to Arabica 0402"@en ;
+    crm:P110_augmented stcath:babdafbc-4d5f-41c7-aceb-9ee499cb320f ;
+    crm:P111_added stcath:513b975d-9704-4171-aaba-3555474400b3 ;
+    crm:P32_used_general_technique <http://w3id.org/lob/concept/5429> .
+
+<http://stcath.sound> a crm:E55_Type ;
+    rdfs:label "sound"@en .
+
+<http://vocab.getty.edu/aat/300129361> a crm:E55_Type ;
+    rdfs:label "blue (color)"@en .
+
+<http://w3id.org/lob/concept/2470> a crm:E57_Material ;
+    rdfs:label "textile"@en .
+
+<http://w3id.org/lob/concept/5429> a crm:E55_Type ;
+    rdfs:label "adhering"@en .
+
+stcath:69e8c68d-5ead-4e8b-a090-580811f6d2a6 a crm:E22_Man-Made_Object ;
+    rdfs:label "Subset of 'Page-markers of Arabica 0402' on Foredge"@en ;
+    crm:P57_has_number_of_parts 10 .
+
+stcath:babdafbc-4d5f-41c7-aceb-9ee499cb320f a crm:E22_Man-Made_Object ;
+    rdfs:label "Arabica 0402"@en ;
+    crm:P46_is_composed_of stcath:513b975d-9704-4171-aaba-3555474400b3 ;
+    crm:TP46_is_composed_of_physical_thing_of_type <http://w3id.org/lob/concept/2945> .
+
+stcath:e084b4f0-1335-45bf-8184-5247231fea3e a crm:E3_Condition_State ;
+    rdfs:label "Condition of subset of Page-markers of Arabica 0402"@en ;
+    crm:P2_has_type <http://stcath.sound> .
+
+stcath:eff9ee0e-4a78-4bd2-af78-33f8259c14a1 a crm:E22_Man-Made_Object ;
+    rdfs:label "Subset of 'Page-markers of Arabica 0402' with condition Sound"@en ;
+    crm:P44_has_condition stcath:e084b4f0-1335-45bf-8184-5247231fea3e ;
+    crm:P57_has_number_of_parts 10 .
+
+<http://w3id.org/lob/concept/2945> a crm:E55_Type ;
+    ns1:prefLabel "leaf tab markers"@en .
+
+stcath:513b975d-9704-4171-aaba-3555474400b3 a crm:E22_Man-Made_Object ;
+    rdfs:label "Page-markers of Arabica 0402"@en ;
+    crm:P2_has_type <http://w3id.org/lob/concept/2945> ;
+    crm:P45_consists_of <http://w3id.org/lob/concept/2470> ;
+    crm:P46_is_composed_of stcath:69e8c68d-5ead-4e8b-a090-580811f6d2a6,
+        stcath:eff9ee0e-4a78-4bd2-af78-33f8259c14a1 ;
+    crm:P56_bears_feature <http://vocab.getty.edu/aat/300129361> .
+

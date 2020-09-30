@@ -2,7 +2,7 @@ from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import SKOS, RDF, RDFS
 import uuid
 from namespaces import apply_namespaces, get_namespace
-from visualise import visualise_graph
+from crmviz.visualise import visualise_graph
 
 def boxingleavesdate(mydb, cursor, cursorupdate):
     graph = Graph() # graph for the dataset

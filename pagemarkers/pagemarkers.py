@@ -4,7 +4,7 @@ from rdflib.tools import rdf2dot
 import uuid
 from graphviz import Digraph
 from namespaces import apply_namespaces, get_namespace
-from visualise import visualise_graph
+from crmviz.visualise import visualise_graph
 
 def pagemarkers(mydb, cursor, cursorupdate):
 

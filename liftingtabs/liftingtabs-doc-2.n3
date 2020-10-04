@@ -1,0 +1,51 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ns1: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix stcath: <https://data.ligatus.org.uk/stcatherines/ms/> .
+
+stcath:e1c490fc-e0b6-41ef-b656-8870ef49fc9d a crm:E79_Part_Addition ;
+    rdfs:label "Addition of board markers to Greek 0614"@en ;
+    crm:P110_augmented stcath:bc0126d8-712a-4bb3-a32c-69be7d7dc78d ;
+    crm:P111_added stcath:4244522f-fdb3-4eff-b552-cdc4e1ce0ad9,
+        stcath:fe845e65-73e7-426f-850f-2141a89598fd ;
+    crm:P32_used_general_technique <http://stcath.underturnin>,
+        <http://w3id.org/lob/concept/5429> .
+
+<http://stcath.underturnin> a crm:E55_Type ;
+    ns1:prefLabel "under turn-in attaching"@en .
+
+<http://w3id.org/lob/concept/5429> a crm:E55_Type ;
+    ns1:prefLabel "adhering"@en .
+
+stcath:28316c92-f0a1-4d1a-b6b7-8a0e7028efb9 a crm:E3_Condition_State ;
+    rdfs:label "Condition of right board marker of Greek 0614"@en ;
+    crm:P2_has_type <http://stcath.brokenoff> .
+
+stcath:4244522f-fdb3-4eff-b552-cdc4e1ce0ad9 a crm:E22_Man-Made_Object ;
+    rdfs:label "Left board marker of Greek 0614"@en ;
+    crm:P2_has_type <http://w3id.org/lob/concept/2833> ;
+    crm:P44_has_condition stcath:cfa96f6f-536a-49f2-96d0-c5bb39118ef9 ;
+    crm:P45_consists_of <http://w3id.org/lob/concept/1658> .
+
+stcath:bc0126d8-712a-4bb3-a32c-69be7d7dc78d a crm:E22_Man-Made_Object ;
+    rdfs:label "Greek 0614"@en .
+
+stcath:cfa96f6f-536a-49f2-96d0-c5bb39118ef9 a crm:E3_Condition_State ;
+    rdfs:label "Condition of left board marker of Greek 0614"@en ;
+    crm:P2_has_type <http://stcath.brokenoff> .
+
+stcath:fe845e65-73e7-426f-850f-2141a89598fd a crm:E22_Man-Made_Object ;
+    rdfs:label "Right board marker of Greek 0614"@en ;
+    crm:P2_has_type <http://w3id.org/lob/concept/2833> ;
+    crm:P44_has_condition stcath:28316c92-f0a1-4d1a-b6b7-8a0e7028efb9 ;
+    crm:P45_consists_of <http://w3id.org/lob/concept/1658> .
+
+<http://stcath.brokenoff> a crm:E55_Type ;
+    ns1:prefLabel "broken off"@en .
+
+<http://w3id.org/lob/concept/1658> a crm:E55_Type ;
+    ns1:prefLabel "tanned skin"@en .
+
+<http://w3id.org/lob/concept/2833> a crm:E55_Type ;
+    ns1:prefLabel "board strap markers"@en .
+

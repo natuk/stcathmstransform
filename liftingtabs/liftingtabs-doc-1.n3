@@ -1,12 +1,11 @@
 @prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
-@prefix ns1: <http://www.w3.org/2004/02/skos/core#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix stcath: <https://data.ligatus.org.uk/stcatherines/ms/> .
 
 stcath:e009097f-d4d5-44c3-9e01-45c13a56f1a1 a crm:E22_Man-Made_Object ;
     rdfs:label "Arabica 0002"@en ;
-    crm:NTP46_is_not_composed_of_physical_thing_of_type <http://w3id.org/lob/concept/2833> .
+    crm:NTP46_is_not_composed_of_physical_thing_of_type <http://w3id.org/lob/concept/2837> .
 
-<http://w3id.org/lob/concept/2833> a crm:E55_Type ;
-    ns1:prefLabel "board strap markers"@en .
+<http://w3id.org/lob/concept/2837> a crm:E55_Type ;
+    rdfs:label "bookmarks"@en .
 

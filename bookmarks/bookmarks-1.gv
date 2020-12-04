@@ -1,0 +1,10 @@
+// MS without bookmarks
+digraph {
+	nodesep=0.5 pad=0.5 rankdir=LR ranksep=1 splines=line
+	node [margin=0 penwidth=3.0 shape=none]
+	httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837 [label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD BGCOLOR = "white"><FONT FACE="Ubuntu">is not composed of physical thing of type</FONT></TD></TR><TR><TD BGCOLOR = "white"><FONT FACE="FreeMono" POINT-SIZE="8">crm:NTP46_is_not_composed_of_physical_thing_of_type</FONT></TD></TR></TABLE>>]
+	httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1:instance:e -> httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837 [arrowhead=none]
+	httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837 -> httpw3idorglobconcept2837:instance:w
+	httpw3idorglobconcept2837 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">                    <TR><TD PORT="instance" CELLPADDING="10" bgcolor="#FAB565"><FONT FACE="Ubuntu">bookmarks</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">http://w3id.org/lob/concept/2837</FONT></TD></TR>                    <TR><TD PORT="class" CELLPADDING="10" bgcolor="#FAB565"><FONT FACE="Ubuntu"><I>Type</I></FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">crm:E55_Type</FONT></TD></TR>                    </TABLE>>]
+	httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">                    <TR><TD PORT="instance" CELLPADDING="10" bgcolor="#E1BA9C"><FONT FACE="Ubuntu">Arabica 0002</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">stcath:e009097f-d4d5-44c3-9e01-45c13a56f1a1</FONT></TD></TR>                    <TR><TD PORT="class" CELLPADDING="10" bgcolor="#E1BA9C"><FONT FACE="Ubuntu"><I>Man-Made Object</I></FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">crm:E22_Man-Made_Object</FONT></TD></TR>                    </TABLE>>]
+}

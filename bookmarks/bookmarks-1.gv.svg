@@ -9,17 +9,31 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(36 124)">
 <title>%3</title>
 <polygon fill="white" stroke="transparent" points="-36,36 -36,-124 830,-124 830,36 -36,36"/>
-<!-- httpw3idorglobconcept2833 -->
+<!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837 -->
 <g id="node1" class="node">
-<title>httpw3idorglobconcept2833</title>
+<title>httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837</title>
+<polygon fill="white" stroke="transparent" points="290.5,-64 290.5,-83 553.5,-83 553.5,-64 290.5,-64"/>
+<text text-anchor="start" x="292.5" y="-69.8" font-family="Ubuntu" font-size="14.00">is not composed of physical thing of type</text>
+<polygon fill="white" stroke="transparent" points="290.5,-49 290.5,-62 553.5,-62 553.5,-49 290.5,-49"/>
+<text text-anchor="start" x="307" y="-53.6" font-family="FreeMono" font-size="8.00">crm:NTP46_is_not_composed_of_physical_thing_of_type</text>
+</g>
+<!-- httpw3idorglobconcept2837 -->
+<g id="node3" class="node">
+<title>httpw3idorglobconcept2837</title>
 <polygon fill="#fab565" stroke="transparent" points="627.5,-44 627.5,-88 794.5,-88 794.5,-44 627.5,-44"/>
 <polygon fill="none" stroke="black" points="627.5,-44 627.5,-88 794.5,-88 794.5,-44 627.5,-44"/>
-<text text-anchor="start" x="647.5" y="-66.8" font-family="Ubuntu" font-size="14.00">board strap markers</text>
-<text text-anchor="start" x="638.5" y="-57.6" font-family="FreeMono" font-size="8.00">http://w3id.org/lob/concept/2833</text>
+<text text-anchor="start" x="675.5" y="-66.8" font-family="Ubuntu" font-size="14.00">bookmarks</text>
+<text text-anchor="start" x="638.5" y="-57.6" font-family="FreeMono" font-size="8.00">http://w3id.org/lob/concept/2837</text>
 <polygon fill="#fab565" stroke="transparent" points="627.5,0 627.5,-44 794.5,-44 794.5,0 627.5,0"/>
 <polygon fill="none" stroke="black" points="627.5,0 627.5,-44 794.5,-44 794.5,0 627.5,0"/>
 <text text-anchor="start" x="696" y="-22.8" font-family="Ubuntu" font-style="italic" font-size="14.00">Type</text>
 <text text-anchor="start" x="683.5" y="-13.6" font-family="FreeMono" font-size="8.00">crm:E55_Type</text>
+</g>
+<!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837&#45;&gt;httpw3idorglobconcept2837 -->
+<g id="edge2" class="edge">
+<title>httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837&#45;&gt;httpw3idorglobconcept2837:w</title>
+<path fill="none" stroke="black" d="M555.19,-66C581.21,-66 604.34,-66 616.94,-66"/>
+<polygon fill="black" stroke="black" points="617,-69.5 627,-66 617,-62.5 617,-69.5"/>
 </g>
 <!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1 -->
 <g id="node2" class="node">
@@ -33,24 +47,10 @@
 <text text-anchor="start" x="53.5" y="-22.8" font-family="Ubuntu" font-style="italic" font-size="14.00">Man&#45;Made Object</text>
 <text text-anchor="start" x="56" y="-13.6" font-family="FreeMono" font-size="8.00">crm:E22_Man&#45;Made_Object</text>
 </g>
-<!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2833 -->
-<g id="node3" class="node">
-<title>httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2833</title>
-<polygon fill="white" stroke="transparent" points="290.5,-64 290.5,-83 553.5,-83 553.5,-64 290.5,-64"/>
-<text text-anchor="start" x="292.5" y="-69.8" font-family="Ubuntu" font-size="14.00">is not composed of physical thing of type</text>
-<polygon fill="white" stroke="transparent" points="290.5,-49 290.5,-62 553.5,-62 553.5,-49 290.5,-49"/>
-<text text-anchor="start" x="307" y="-53.6" font-family="FreeMono" font-size="8.00">crm:NTP46_is_not_composed_of_physical_thing_of_type</text>
-</g>
-<!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1&#45;&gt;httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2833 -->
+<!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1&#45;&gt;httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837 -->
 <g id="edge1" class="edge">
-<title>httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1:e&#45;&gt;httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2833</title>
+<title>httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1:e&#45;&gt;httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2837</title>
 <path fill="none" stroke="black" d="M216,-66C216,-66 248.62,-66 287.81,-66"/>
-</g>
-<!-- httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2833&#45;&gt;httpw3idorglobconcept2833 -->
-<g id="edge2" class="edge">
-<title>httpsdataligatusorgukstcatherinesmse009097fd4d544c39e0145c13a56f1a1httpwwwcidoccrmorgcidoccrmNTP46_is_not_composed_of_physical_thing_of_typehttpw3idorglobconcept2833&#45;&gt;httpw3idorglobconcept2833:w</title>
-<path fill="none" stroke="black" d="M555.19,-66C581.21,-66 604.34,-66 616.94,-66"/>
-<polygon fill="black" stroke="black" points="617,-69.5 627,-66 617,-62.5 617,-69.5"/>
 </g>
 </g>
 </svg>

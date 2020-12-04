@@ -446,6 +446,7 @@ def bookmarks(mydb, cursor, cursorupdate):
     dot3.render('bookmarks/bookmarks-3.gv', format='svg')
 
     # serialise the graph
-    graph.serialize(destination='liftingtabs/liftingtabs.ttl', format='turtle', encoding="utf-8")
-    docgraph1.serialize(destination='liftingtabs/liftingtabs-doc-1.n3', format='n3', encoding="utf-8")
-    docgraph2.serialize(destination='liftingtabs/liftingtabs-doc-2.n3', format='n3', encoding="utf-8")
+    graph.serialize(destination='bookmarks/bookmarks.ttl', format='turtle', encoding="utf-8")
+    docgraph1.serialize(destination='bookmarks/bookmarks-doc-1.n3', format='n3', encoding="utf-8")
+    docgraph2.serialize(destination='bookmarks/bookmarks-doc-2.n3', format='n3', encoding="utf-8")
+    docgraph3.serialize(destination='bookmarks/bookmarks-doc-3.n3', format='n3', encoding="utf-8")

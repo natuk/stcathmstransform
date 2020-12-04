@@ -1,0 +1,7 @@
+// MS with loose bookmark
+digraph {
+	nodesep=0.5 pad=0.5 rankdir=LR ranksep=1 splines=line
+	node [margin=0 penwidth=3.0 shape=none]
+	httpstcathloose [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">                    <TR><TD PORT="instance" CELLPADDING="10" bgcolor="#FAB565"><FONT FACE="Ubuntu">loose (bookmarks)</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">http://stcath.loose</FONT></TD></TR>                    <TR><TD PORT="class" CELLPADDING="10" bgcolor="#FAB565"><FONT FACE="Ubuntu"><I>Type</I></FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">crm:E55_Type</FONT></TD></TR>                    </TABLE>>]
+	httpw3idorglobconcept2837 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">                    <TR><TD PORT="instance" CELLPADDING="10" bgcolor="#FAB565"><FONT FACE="Ubuntu">bookmarks</FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">http://w3id.org/lob/concept/2837</FONT></TD></TR>                    <TR><TD PORT="class" CELLPADDING="10" bgcolor="#FAB565"><FONT FACE="Ubuntu"><I>Type</I></FONT><BR /><FONT FACE="FreeMono" POINT-SIZE="8">crm:E55_Type</FONT></TD></TR>                    </TABLE>>]
+}

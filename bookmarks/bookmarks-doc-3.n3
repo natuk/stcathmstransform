@@ -1,0 +1,9 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://stcath.loose> a crm:E55_Type ;
+    rdfs:label "loose (bookmarks)"@en .
+
+<http://w3id.org/lob/concept/2837> a crm:E55_Type ;
+    rdfs:label "bookmarks"@en .
+

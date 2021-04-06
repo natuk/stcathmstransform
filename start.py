@@ -8,6 +8,7 @@ from openingcharacteristics import openingcharacteristics # 1-1-openingcharacter
 from pagemarkers import pagemarkers # 1-2-PageMarkers and PageMarkers
 from liftingtabs import liftingtabs # 1-3-liftingTabs, LiftingTabs and LiftingTabsCondition
 from bookmarks import bookmarks # 1-4-Bookmarks, Bookmarks, BookmarkMaterials, BookmarkColours
+from insertedmaterial import insertedmaterial # 1-5-InsertedMaterial
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -23,5 +24,7 @@ cursorupdate = mydb.cursor(buffered=True)
 #openingcharacteristics.openingcharacteristics(mydb, cursor, cursorupdate)
 #pagemarkers.pagemarkers(mydb, cursor, cursorupdate)
 #liftingtabs.liftingtabs(mydb, cursor, cursorupdate)
-bookmarks.bookmarks(mydb, cursor, cursorupdate)
+#bookmarks.bookmarks(mydb, cursor, cursorupdate)
+insertedmaterial.insertedmaterial(mydb, cursor, cursorupdate)
+
 

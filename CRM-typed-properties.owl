@@ -63,6 +63,24 @@
     
 
 
+    <!-- http://www.cidoc-crm.org/cidoc-crm/NTPXX_does_not_hold_or_support_physical_thing_of_type -->
+
+    <ObjectProperty rdf:about="http://www.cidoc-crm.org/cidoc-crm/NTPXX_does_not_hold_or_support_physical_thing_of_type">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">does not hold or support physical thing of type</rdfs:label>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.cidoc-crm.org/cidoc-crm/TPXX_holds_or_supports_physical_thing_of_type -->
+
+    <ObjectProperty rdf:about="http://www.cidoc-crm.org/cidoc-crm/TPXX_holds_or_supports_physical_thing_of_type">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">holds or supports physical thing of type</rdfs:label>
+    </ObjectProperty>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
